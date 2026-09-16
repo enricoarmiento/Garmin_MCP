@@ -1,28 +1,382 @@
 <!doctype html>
 <html lang="it">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Garmin MCP — I tuoi dati, il tuo AI</title>
-<meta name="description" content="Collega i tuoi dati Garmin a Claude o Codex. Scegli il tuo assistente e configura il collegamento sul tuo computer, con accesso in sola lettura.">
-<meta name="theme-color" content="#101c2d"><meta property="og:title" content="Garmin MCP — I tuoi dati, il tuo AI"><meta property="og:description" content="Attività, sonno e recupero. Porta i tuoi dati Garmin nella conversazione con Claude o Codex.">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Garmin MCP — Everything is a tool</title>
+  <meta name="description" content="Server MCP locale per collegare i tuoi dati Garmin Connect a Claude Desktop, Codex e assistenti AI con accesso sicuro in sola lettura.">
+  <meta name="theme-color" content="#060b13">
+  <meta property="og:title" content="Garmin MCP — Developer Preview">
+  <meta property="og:description" content="Attività, sonno, battito cardiaco, stress e trend Garmin nel tuo assistente AI.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
 </head>
 <body>
-<div class="atmosphere" aria-hidden="true"><div class="grid"></div><div class="beam beam-one"></div><div class="beam beam-two"></div><div class="orb"></div></div>
-<header class="shell header"><a class="brand" href="/" aria-label="Garmin MCP, home"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M3 24h8l5-13 8 22 5-13h8" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>garmin<span class="brand-light">mcp</span></span><span class="tag">Connect</span></a><a class="header-link" href="#guida">Guida rapida <span aria-hidden="true">↗</span></a></header>
-<main>
-<section class="shell hero" aria-labelledby="hero-title">
-<div class="intro"><p class="eyebrow">Garmin Connect, incontra il tuo assistente.</p><h1 id="hero-title">I tuoi dati.<br>Una nuova <span>prospettiva.</span></h1><p class="lead">Ogni attività racconta qualcosa.<br>Parlane con Claude o Codex.</p><p class="description">Sonno, allenamenti e recupero: porta i dati del tuo Garmin nella conversazione e trova le risposte che cerchi.</p><div class="actions"><button class="button primary" id="connect-main"><span class="spark" aria-hidden="true">✳</span><span id="connect-label">Collega Claude</span><span aria-hidden="true">↗</span></button><a class="button secondary" href="#guida"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>Come funziona</a></div><div class="trust"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m10 2 6 3v5c0 4-6 7-6 7s-6-3-6-7V5l6-3Z"/><path d="m7 9 2 2 4-4"/></svg>Account personale <span>·</span> Accesso in sola lettura</div></div>
-<div class="connect-area"><div class="client-tabs" role="tablist" aria-label="Scegli il tuo assistente"><button role="tab" id="tab-claude" aria-selected="true" aria-controls="client-panel" data-client="claude"><span class="spark" aria-hidden="true">✳</span>Claude</button><button role="tab" id="tab-codex" aria-selected="false" aria-controls="client-panel" tabindex="-1" data-client="codex"><span class="code-icon" aria-hidden="true">⌘</span>Codex</button><span class="tab-hint">Scegli dove collegarti</span></div>
-<div class="terminal" id="client-panel" role="tabpanel" aria-labelledby="tab-claude"><div class="terminal-bar"><div class="lights" aria-hidden="true"><i></i><i></i><i></i></div><span id="terminal-label">Configurazione · Claude Desktop</span><button class="copy icon-button" id="copy-command" aria-label="Copia comando di installazione"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg><span>Copia</span></button></div>
-<div class="terminal-content"><div class="terminal-meta"><span>01 / INSTALLA E COLLEGA</span><label class="os-label"><span class="sr-only">Sistema operativo</span><select id="os"><option value="mac">macOS</option><option value="windows">Windows</option><option value="linux">Linux</option></select></label></div><div class="command-row"><span class="prompt" aria-hidden="true">$</span><code id="command"></code></div><p class="command-note" id="command-note">Incolla nel Terminale. Il comando prepara il collegamento.</p></div>
-<div class="terminal-bottom"><span><span class="small-lock" aria-hidden="true">◇</span> Login Garmin sul tuo computer</span><button id="show-steps">Istruzioni <span aria-hidden="true">↗</span></button></div></div>
-<p class="below-terminal">Un’installazione. Poi basta chiedere.</p></div>
-</section>
-<section class="shell data-strip" aria-label="Dati disponibili"><span class="strip-label">IL TUO GARMIN, IN CONVERSAZIONE</span><div><span>↗ &nbsp;Attività</span><span>☾ &nbsp;Sonno</span><span>♡ &nbsp;Battito</span><span>⌁ &nbsp;Stress e HRV</span><span>▱ &nbsp;Body Battery</span></div></section>
-<section class="shell guide" id="guida" aria-labelledby="guide-title"><div class="section-top"><p class="eyebrow">Pochi passi, sul tuo computer</p><h2 id="guide-title">Dai numeri alle risposte.</h2></div><div class="steps"><article><span class="step-number">01</span><h3>Scegli il tuo assistente</h3><p>Claude Desktop o Codex. Seleziona anche il sistema operativo e copia il comando qui sopra.</p></article><article><span class="step-number">02</span><h3>Accedi al tuo Garmin</h3><p>Esegui il comando nel terminale. Inserisci email, password e codice di verifica, se richiesto.</p></article><article><span class="step-number">03</span><h3>Apri la conversazione</h3><p>Chiudi e riapri l’app scelta. Chiedi di usare Garmin: l’assistente leggerà i dati del tuo account.</p></article></div><button class="example-prompt" id="copy-prompt"><span><span class="quote-mark" aria-hidden="true">“</span>Usa Garmin per analizzare il mio sonno degli ultimi 7 giorni.</span><span class="prompt-action">Copia richiesta ↗</span></button></section>
-<section class="shell faq" aria-label="Informazioni sul collegamento"><details><summary>Posso collegarlo direttamente dal browser?<span aria-hidden="true">+</span></summary><p>Il browser prepara le istruzioni; per avviare un server locale devi eseguire il comando sul computer. Il collegamento è per Claude Desktop e Codex locale, non per Claude nel browser o sul telefono. Il sito non può verificare da solo se sei connesso.</p></details><details><summary>Cosa viene installato e dove vanno i miei dati?<span aria-hidden="true">+</span></summary><p>L’installer prepara uv e Python, se necessari, installa Garmin MCP e configura l’app scelta. Salva una copia della configurazione precedente quando la modifica. Il login avviene con Garmin e i token restano sul computer. I dati richiesti saranno condivisi con l’assistente scelto, secondo le sue impostazioni. Questo sito non riceve password, token o dati fitness.</p></details><details><summary>Cosa serve per iniziare?<span aria-hidden="true">+</span></summary><p>Un account Garmin Connect, un dispositivo già sincronizzato, una connessione internet e Claude Desktop oppure Codex installato. macOS e Windows sono disponibili per entrambi; per Linux scegli Codex. Eventuali regole aziendali possono impedire l’installazione di server locali. È un progetto indipendente che usa un client Garmin non ufficiale: la disponibilità dipende dai servizi Garmin.</p></details><details><summary>Il collegamento non compare nell’app.<span aria-hidden="true">+</span></summary><p>Chiudi completamente e riapri l’app dopo il messaggio finale dell’installer. Controlla i server MCP nelle impostazioni del client. Se il login fallisce, verifica email, password e MFA; se Garmin limita le richieste, attendi prima di riprovare. Il pulsante Copia indica solo che hai copiato il comando, non che il collegamento è già attivo.</p></details></section>
-</main>
-<footer class="shell footer"><span>garmin mcp <span class="footer-divider">/</span> Progetto indipendente</span><div><a href="/downloads/garmin-mcp-source.zip" download>Sorgente</a><a href="https://github.com/cyberjunky/python-garminconnect" target="_blank" rel="noopener noreferrer">Garmin library ↗</a><a href="https://learn.chatgpt.com/docs/extend/mcp" target="_blank" rel="noopener noreferrer">MCP docs ↗</a></div></footer>
-<dialog id="setup-dialog" aria-labelledby="dialog-title"><button class="dialog-close" aria-label="Chiudi istruzioni">×</button><p class="eyebrow">Il tuo prossimo passo</p><h2 id="dialog-title">Collega Claude</h2><p id="dialog-intro">Apri Terminale sul Mac, poi segui questi passaggi.</p><ol><li><strong>Copia ed esegui il comando.</strong><span>Installa il collegamento e le dipendenze necessarie.</span><button class="button primary" id="dialog-copy">Copia comando</button></li><li><strong>Accedi a Garmin nel terminale.</strong><span>Password e codice MFA non vengono mostrati mentre li scrivi. Premi Invio per confermare.</span></li><li><strong id="restart-step">Chiudi e riapri Claude Desktop.</strong><span>Chiedi: «Usa Garmin per leggere i miei passi di oggi».</span></li></ol><p class="dialog-footnote">Il sito non richiede le tue credenziali. Servono l’app scelta e un account Garmin.</p><a id="installer-link" href="/downloads/install.sh" target="_blank" rel="noopener">Leggi lo script prima di eseguirlo ↗</a></dialog><div id="toast" role="status" aria-live="polite"></div>
-</body></html>
+
+  <!-- Background visual atmosphere: grid + fluid cosmic ribbons -->
+  <div class="atmosphere" aria-hidden="true">
+    <div class="grid-overlay"></div>
+    <div class="glow-orb-primary"></div>
+    <div class="glow-orb-secondary"></div>
+    <svg class="fluid-wave" viewBox="0 0 1440 900" fill="none" preserveAspectRatio="none">
+      <path d="M720 0C880 180 1150 220 1300 120C1420 40 1480 200 1380 340C1250 520 950 480 820 620C700 750 780 880 620 900C460 920 380 780 440 640C510 480 380 320 460 180C540 40 600 -120 720 0Z" fill="url(#fluid-grad)" filter="url(#blur-large)" opacity="0.42"/>
+      <path d="M960 40C1100 160 1320 200 1420 120C1500 50 1480 320 1320 420C1140 540 880 460 760 600C660 720 720 860 580 880C480 890 420 760 480 620C540 460 460 300 560 160C640 40 840 -60 960 40Z" fill="url(#fluid-grad-light)" filter="url(#blur-medium)" opacity="0.28"/>
+      <defs>
+        <linearGradient id="fluid-grad" x1="400" y1="0" x2="1400" y2="800" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#1e3a8a" stop-opacity="0.9"/>
+          <stop offset="0.4" stop-color="#2563eb" stop-opacity="0.6"/>
+          <stop offset="0.75" stop-color="#38bdf8" stop-opacity="0.35"/>
+          <stop offset="1" stop-color="#0f172a" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="fluid-grad-light" x1="600" y1="50" x2="1300" y2="700" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#60a5fa" stop-opacity="0.6"/>
+          <stop offset="0.5" stop-color="#93c5fd" stop-opacity="0.3"/>
+          <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="blur-large" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="85"/>
+        </filter>
+        <filter id="blur-medium" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="55"/>
+        </filter>
+      </defs>
+    </svg>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="site-header">
+    <div class="shell header-content">
+      <a class="brand" href="/" aria-label="Garmin MCP home">
+        <svg class="brand-logo" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+          <rect width="36" height="36" rx="10" fill="url(#logo-grad)"/>
+          <path d="M7 19.5h6l3.5-9.5 5.5 15 4-8.5h3" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="logo-grad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#2563eb"/>
+              <stop offset="1" stop-color="#0284c7"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="brand-text">garmin<span class="brand-bold">mcp</span></span>
+        <span class="badge-pill" data-i18n="previewBadge">Harness</span>
+      </a>
+
+      <!-- Right menu: Language Switcher Pill -->
+      <div class="header-actions">
+        <div class="lang-switch" role="group" aria-label="Language switcher">
+          <button type="button" class="lang-btn active" data-lang="it" id="btn-lang-it">IT</button>
+          <button type="button" class="lang-btn" data-lang="en" id="btn-lang-en">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section (Two-column layout matching screenshot) -->
+    <section class="shell hero" aria-labelledby="hero-title">
+      <!-- Left Column: Typography & Action Buttons -->
+      <div class="hero-left">
+        <p class="hero-kicker" data-i18n="eyebrow">Garmin MCP developer preview</p>
+        <h1 id="hero-title" class="hero-title" data-i18n="heroTitle">Everything is a tool</h1>
+        
+        <p class="hero-lead" data-i18n="heroSubtitle1">
+          Garmin MCP is now in developer preview for agent harness developers and AI assistants worldwide — source code included.
+        </p>
+        <p class="hero-subtext" data-i18n="heroSubtitle2">
+          Every capability is a plugin that can be swapped or queried: daily summaries, sleep stages, heart rate, stress, body battery, activities, and 30-day trends.
+        </p>
+
+        <!-- 4 Action Buttons in 2x2 Grid -->
+        <div class="hero-action-grid">
+          <a class="btn btn-white" href="https://github.com/enricoarmiento/Garmin_MCP" target="_blank" rel="noopener noreferrer">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            <span data-i18n="btnGithub">View on GitHub</span>
+          </a>
+
+          <a class="btn btn-dark" href="#guide">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <span data-i18n="btnDocs">Developer docs</span>
+          </a>
+
+          <a class="btn btn-dark" href="#tools">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            <span data-i18n="btnTools">MCP Tools</span>
+          </a>
+
+          <a class="btn btn-dark" href="/downloads/garmin-mcp-source.zip" download>
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span data-i18n="btnDownload">Download package</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Terminal Box with DeepSeek Tabs & Dots -->
+      <div class="hero-right">
+        <!-- Top Tabs (Quick start / Install from source / Claude / Codex) -->
+        <div class="terminal-tab-nav" role="tablist" aria-label="Installation mode">
+          <button class="tab-pill active" id="tab-quickstart" role="tab" aria-selected="true" aria-controls="term-panel" data-tab="quickstart" data-i18n="tabQuickstart">Quick start</button>
+          <button class="tab-pill" id="tab-source" role="tab" aria-selected="false" aria-controls="term-panel" tabindex="-1" data-tab="source" data-i18n="tabSource">Install from source</button>
+          <button class="tab-pill" id="tab-claude" role="tab" aria-selected="false" aria-controls="term-panel" tabindex="-1" data-tab="claude" data-i18n="tabClaude">Claude Desktop</button>
+          <button class="tab-pill" id="tab-codex" role="tab" aria-selected="false" aria-controls="term-panel" tabindex="-1" data-tab="codex" data-i18n="tabCodex">Codex</button>
+        </div>
+
+        <!-- Terminal Window Card -->
+        <div class="terminal-box" id="term-panel" role="tabpanel" aria-labelledby="tab-quickstart">
+          <div class="terminal-header">
+            <div class="terminal-dots" aria-hidden="true">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+            </div>
+
+            <!-- Terminal controls (OS Switcher + Copy Button) -->
+            <div class="terminal-actions">
+              <div class="os-pills" id="os-pills" role="group" aria-label="Operating system">
+                <button type="button" class="os-pill active" data-os="mac">macOS</button>
+                <button type="button" class="os-pill" data-os="windows">Windows</button>
+                <button type="button" class="os-pill" data-os="linux">Linux</button>
+              </div>
+
+              <button class="copy-btn" id="btn-copy" aria-label="Copy terminal command">
+                <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                <span id="copy-text" data-i18n="copy">Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="terminal-body">
+            <div class="code-line">
+              <span class="cmd-prompt" aria-hidden="true">$</span>
+              <code id="term-command" class="cmd-text">curl -fsSL https://garmin-mcp-connect.enricoarmiento.chatgpt.site/downloads/install.sh | bash -s -- claude</code>
+            </div>
+            <p class="term-note" id="term-note" data-i18n="termNoteMac">Paste into Terminal. The command prepares the connection.</p>
+          </div>
+
+          <div class="terminal-footer">
+            <div class="terminal-status">
+              <span class="status-indicator"></span>
+              <span data-i18n="trustText">Personal account · Read-only access · Strictly local data</span>
+            </div>
+            <button type="button" class="btn-text-link" id="btn-modal-open">
+              <span data-i18n="modalTitle">Setup guide</span> ↗
+            </button>
+          </div>
+        </div>
+
+        <p class="below-terminal-text" data-i18n="belowTerminal">
+          Local read-only installation. No intermediate servers or telemetry.
+        </p>
+      </div>
+    </section>
+
+    <!-- Data Strip: Biometrics in conversation -->
+    <section class="shell data-ribbon" aria-label="Available biometric metrics">
+      <span class="ribbon-label" data-i18n="dataStripLabel">YOUR GARMIN, IN CONVERSATION</span>
+      <div class="ribbon-tags">
+        <span class="ribbon-item">↗ &nbsp;<span data-i18n="metricActivities">Activities & Laps</span></span>
+        <span class="ribbon-item">☾ &nbsp;<span data-i18n="metricSleep">Sleep Stages</span></span>
+        <span class="ribbon-item">♡ &nbsp;<span data-i18n="metricHeart">Heart Rate</span></span>
+        <span class="ribbon-item">⌁ &nbsp;<span data-i18n="metricStress">Stress & HRV</span></span>
+        <span class="ribbon-item">▱ &nbsp;<span data-i18n="metricBattery">Body Battery</span></span>
+        <span class="ribbon-item">📈 &nbsp;<span data-i18n="metricTrends">Trends up to 31d</span></span>
+      </div>
+    </section>
+
+    <!-- MCP Tools Grid Section -->
+    <section class="shell tools-section" id="tools" aria-labelledby="tools-title">
+      <div class="section-heading">
+        <p class="section-kicker" data-i18n="previewBadge">Preview</p>
+        <h2 id="tools-title" data-i18n="toolsSectionTitle">Available MCP Tools</h2>
+        <p class="section-desc" data-i18n="toolsSectionDesc">Five native read-only tools adhering to the Model Context Protocol standard.</p>
+      </div>
+
+      <div class="tools-grid">
+        <article class="tool-card">
+          <div class="tool-badge">Tool 01</div>
+          <h3 class="tool-name">garmin_status</h3>
+          <p class="tool-desc" data-i18n="tool1Desc">Check presence and local validity of session tokens without any network roundtrip.</p>
+          <div class="tool-foot"><code>params: none</code></div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-badge">Tool 02</div>
+          <h3 class="tool-name">garmin_daily</h3>
+          <p class="tool-desc" data-i18n="tool2Desc">Fetch daily health summaries, granular sleep phases, resting HR, stress, and body battery.</p>
+          <div class="tool-foot"><code>params: day, metric</code></div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-badge">Tool 03</div>
+          <h3 class="tool-name">garmin_activities</h3>
+          <p class="tool-desc" data-i18n="tool3Desc">List recent workouts with pagination, sport types, distance, and duration metrics.</p>
+          <div class="tool-foot"><code>params: start, limit</code></div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-badge">Tool 04</div>
+          <h3 class="tool-name">garmin_activity</h3>
+          <p class="tool-desc" data-i18n="tool4Desc">Deep-dive into a specific activity with split times, elevation, and lap-by-lap heart rate.</p>
+          <div class="tool-foot"><code>params: activity_id</code></div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-badge">Tool 05</div>
+          <h3 class="tool-name">garmin_trends</h3>
+          <p class="tool-desc" data-i18n="tool5Desc">Extract historical time series from 1 to 31 days with automatic average calculations.</p>
+          <div class="tool-foot"><code>params: start_date, end_date</code></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 3-Step Guide Section -->
+    <section class="shell guide-section" id="guide" aria-labelledby="guide-title">
+      <div class="section-heading">
+        <p class="section-kicker" data-i18n="guideEyebrow">Few steps on your machine</p>
+        <h2 id="guide-title" data-i18n="guideTitle">From raw metrics to answers.</h2>
+      </div>
+
+      <div class="steps-grid">
+        <article class="step-card">
+          <span class="step-num" data-i18n="step1Num">01</span>
+          <h3 data-i18n="step1Title">Choose your assistant</h3>
+          <p data-i18n="step1Desc">Claude Desktop or Codex. Select your operating system and run the quickstart script.</p>
+        </article>
+
+        <article class="step-card">
+          <span class="step-num" data-i18n="step2Num">02</span>
+          <h3 data-i18n="step2Title">Local Garmin login</h3>
+          <p data-i18n="step2Desc">Authenticate via your local terminal. Access tokens remain encrypted on your device (0600).</p>
+        </article>
+
+        <article class="step-card">
+          <span class="step-num" data-i18n="step3Num">03</span>
+          <h3 data-i18n="step3Title">Start chatting</h3>
+          <p data-i18n="step3Desc">Relaunch your AI client and ask questions about your health, activities, and recovery trends.</p>
+        </article>
+      </div>
+
+      <!-- Example conversation prompt -->
+      <div class="example-prompt-card" id="btn-copy-prompt" role="button" tabindex="0" aria-label="Copy example prompt">
+        <div class="prompt-left">
+          <span class="quote-symbol" aria-hidden="true">“</span>
+          <span id="example-prompt-text" data-i18n="examplePromptText">“Use Garmin to analyze my sleep stages and stress trends over the last 7 days.”</span>
+        </div>
+        <span class="prompt-copy-badge" data-i18n="examplePromptAction">Copy prompt ↗</span>
+      </div>
+    </section>
+
+    <!-- FAQ Accordion -->
+    <section class="shell faq-section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <h2 id="faq-title" data-i18n="faqTitle">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>
+            <span data-i18n="faq1Q">Can I connect directly from the web browser?</span>
+            <span class="faq-arrow" aria-hidden="true">+</span>
+          </summary>
+          <p data-i18n="faq1A">No. The MCP server runs locally as a native stdio child process. This web page provides documentation and installation commands: execution happens solely on your personal computer.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span data-i18n="faq2Q">Where are my credentials and biometric data stored?</span>
+            <span class="faq-arrow" aria-hidden="true">+</span>
+          </summary>
+          <p data-i18n="faq2A">Your credentials are never sent to third-party servers. Login takes place directly between your terminal and Garmin Connect. Access tokens are stored in ~/.garmin-mcp with strict permissions (0700/0600).</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span data-i18n="faq3Q">Which AI clients are supported?</span>
+            <span class="faq-arrow" aria-hidden="true">+</span>
+          </summary>
+          <p data-i18n="faq3A">Officially supports Claude Desktop (macOS & Windows) as well as Codex or any client compatible with the Model Context Protocol stdio specification.</p>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span data-i18n="faq4Q">Can this server modify or delete my data on Garmin Connect?</span>
+            <span class="faq-arrow" aria-hidden="true">+</span>
+          </summary>
+          <p data-i18n="faq4A">Never. The server is strictly read-only: it provides zero APIs or capabilities to write, upload, modify, or erase data on Garmin Connect.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="shell site-footer">
+    <div class="footer-left">
+      <span data-i18n="footerText">Garmin MCP · Independent Open Source Project</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/enricoarmiento/Garmin_MCP" target="_blank" rel="noopener noreferrer" data-i18n="footerRepo">GitHub Repo</a>
+      <a href="/downloads/garmin-mcp-source.zip" download data-i18n="footerSource">Source ZIP</a>
+      <a href="https://github.com/cyberjunky/python-garminconnect" target="_blank" rel="noopener noreferrer" data-i18n="footerLibrary">Garmin Connect Library ↗</a>
+      <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer">MCP Specs ↗</a>
+    </div>
+  </footer>
+
+  <!-- Detailed Setup Dialog Modal -->
+  <dialog id="setup-dialog" class="setup-modal" aria-labelledby="modal-heading">
+    <div class="modal-box">
+      <button class="modal-close-btn" id="modal-close" aria-label="Close dialog">&times;</button>
+      <p class="section-kicker" data-i18n="previewBadge">Preview</p>
+      <h2 id="modal-heading" data-i18n="modalTitle">Installation Instructions</h2>
+      
+      <ol class="modal-steps">
+        <li>
+          <strong data-i18n="modalStep1">Run the quickstart command inside your local terminal.</strong>
+          <div class="modal-code-box">
+            <code id="modal-code">curl -fsSL https://garmin-mcp-connect.enricoarmiento.chatgpt.site/downloads/install.sh | bash</code>
+          </div>
+        </li>
+        <li>
+          <strong data-i18n="modalStep2">Log in to Garmin Connect entering your email, password, and MFA code if prompted.</strong>
+        </li>
+        <li>
+          <strong data-i18n="modalStep3">Relaunch Claude Desktop or Codex to register the new MCP server tools.</strong>
+        </li>
+      </ol>
+
+      <div class="modal-actions">
+        <button class="btn btn-white" id="modal-copy-btn">
+          <span data-i18n="copy">Copy command</span>
+        </button>
+        <button class="btn btn-dark" id="modal-dismiss" data-i18n="close">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>

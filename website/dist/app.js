@@ -1,87 +1,409 @@
 'use strict';
-const base = 'https://garmin-mcp-connect.enricoarmiento.chatgpt.site';
-const $ = id => document.getElementById(id);
-let client = 'claude';
-const platform = navigator.userAgent;
-$('os').value = /Windows/i.test(platform) ? 'windows' : /Linux/i.test(platform) && !/Android/i.test(platform) ? 'linux' : 'mac';
-if ($('os').value === 'linux') client = 'codex';
-let toastTimer;
-function command() {
-  if ($('os').value === 'windows') return `& ([scriptblock]::Create((irm '${base}/downloads/install.ps1'))) -Client ${client}`;
-  return `curl -fsSL ${base}/downloads/install.sh | bash -s -- ${client}`;
+
+// Base download URL for installers
+const BASE_URL = 'https://garmin-mcp-connect.enricoarmiento.chatgpt.site';
+
+// Bilingual translations dictionary (Italian & English)
+const TRANSLATIONS = {
+  it: {
+    previewBadge: "Preview",
+    eyebrow: "Garmin MCP anteprima sviluppatori",
+    heroTitle: "I tuoi dati, in conversazione",
+    heroSubtitle1: "Garmin MCP è disponibile in anteprima per assistenti AI e flussi con agenti — codice sorgente locale incluso.",
+    heroSubtitle2: "Ogni metrica è uno strumento interrogabile con privacy locale: attività, fasi del sonno, battito cardiaco, stress, body battery e trend a 30 giorni direttamente in Claude e Codex.",
+    btnGithub: "Vedi su GitHub",
+    btnDocs: "Guida setup",
+    btnTools: "Strumenti MCP",
+    btnDownload: "Scarica sorgenti",
+    tabQuickstart: "Avvio rapido",
+    tabSource: "Installa da sorgente",
+    tabClaude: "Claude Desktop",
+    tabCodex: "Codex",
+    copy: "Copia",
+    copied: "Copiato!",
+    termNoteMac: "Incolla nel Terminale. Il comando prepara il collegamento.",
+    termNoteWin: "Incolla in PowerShell. Il comando prepara il collegamento.",
+    termNoteLinux: "Incolla nel Terminale Linux. Il comando prepara il collegamento per Codex.",
+    termNoteSource: "Clona il repository GitHub, sincronizza le dipendenze con uv ed effettua il login locale.",
+    termNoteClaude: "Configurazione automatica del server locale stdio per Claude Desktop.",
+    termNoteCodex: "Configurazione del server stdio per Codex o ambienti di sviluppo compatibili.",
+    trustText: "Account personale · Accesso sola lettura · Dati locali",
+    belowTerminal: "Installazione locale in sola lettura. Nessun server intermedio né tracciamento.",
+    dataStripLabel: "IL TUO GARMIN, IN CONVERSAZIONE",
+    metricActivities: "Attività e giri",
+    metricSleep: "Fasi del sonno",
+    metricHeart: "Battito cardiaco",
+    metricStress: "Stress & HRV",
+    metricBattery: "Body Battery",
+    metricTrends: "Trend fino a 31gg",
+    toolsSectionTitle: "Strumenti MCP disponibili",
+    toolsSectionDesc: "Cinque strumenti nativi pronti all'uso per il protocollo Model Context Protocol.",
+    tool1Desc: "Verifica locale della validità dei token di sessione senza chiamate di rete.",
+    tool2Desc: "Recupera riepilogo giornaliero, sonno dettagliato, battito, stress e body battery.",
+    tool3Desc: "Elenco delle attività recenti con paginazione, tipo sport e metriche aggregate.",
+    tool4Desc: "Dettaglio completo della singola sessione con giri, split e frequenze cardiache.",
+    tool5Desc: "Analisi di serie storiche e andamenti da 1 a 31 giorni con calcolo medie.",
+    guideEyebrow: "Pochi passi, sul tuo computer",
+    guideTitle: "Dai numeri alle risposte.",
+    step1Num: "01",
+    step1Title: "Scegli il tuo assistente",
+    step1Desc: "Claude Desktop o Codex. Seleziona il tuo sistema operativo ed esegui il comando rapido.",
+    step2Num: "02",
+    step2Title: "Accedi a Garmin in locale",
+    step2Desc: "Esegui il login nel tuo terminale. I token rimangono crittografati sul tuo computer (0600).",
+    step3Num: "03",
+    step3Title: "Inizia a conversare",
+    step3Desc: "Riavvia il client AI e chiedi di analizzare i tuoi dati biometrici e le attività sportive.",
+    examplePromptText: "“Usa Garmin per analizzare il mio sonno e il trend di stress degli ultimi 7 giorni.”",
+    examplePromptAction: "Copia richiesta ↗",
+    faqTitle: "Domande frequenti",
+    faq1Q: "Posso collegarlo direttamente dal browser?",
+    faq1A: "No. Il server MCP è un processo locale avviato via stdio. Il browser serve solo per consultare la documentazione o scaricare l'installer: l'esecuzione avviene unicamente sulla tua macchina.",
+    faq2Q: "Dove vengono salvate le credenziali e i miei dati sanitari?",
+    faq2A: "Le tue credenziali non vengono mai inviate a server terzi. Il login avviene direttamente tra il tuo terminale e Garmin Connect. I token sono salvati nella cartella locale ~/.garmin-mcp protetta con permessi restrittivi (0700/0600).",
+    faq3Q: "Quali client sono supportati?",
+    faq3A: "Supporta ufficialmente Claude Desktop (macOS e Windows) e Codex / qualsiasi altro client compatibile con le specifiche Model Context Protocol (stdio).",
+    faq4Q: "Il server può modificare o cancellare i miei dati su Garmin?",
+    faq4A: "Assolutamente no. Il server è strettamente in sola lettura (read-only): non contiene alcuna API per inviare, modificare o cancellare attività o metriche su Garmin Connect.",
+    footerText: "Garmin MCP · Progetto Open Source indipendente",
+    footerSource: "Sorgente ZIP",
+    footerRepo: "GitHub Repo",
+    footerLibrary: "Libreria Garmin Connect ↗",
+    modalTitle: "Istruzioni di installazione",
+    modalStep1: "Esegui il comando di avvio rapido nel tuo terminale locale:",
+    modalStep2: "Effettua il login a Garmin Connect inserendo credenziali e codice MFA se richiesto.",
+    modalStep3: "Riavvia Claude Desktop o Codex per iniziare a interrogare i tuoi dati.",
+    close: "Chiudi"
+  },
+  en: {
+    previewBadge: "Preview",
+    eyebrow: "Garmin MCP developer preview",
+    heroTitle: "Everything is a tool",
+    heroSubtitle1: "Garmin MCP is now in developer preview for agent harness developers and AI assistants worldwide — source code included.",
+    heroSubtitle2: "Every capability is a plugin that can be swapped or queried: daily summaries, sleep stages, heart rate, stress, body battery, activities, and 30-day trends.",
+    btnGithub: "View on GitHub",
+    btnDocs: "Developer docs",
+    btnTools: "MCP Tools",
+    btnDownload: "Download package",
+    tabQuickstart: "Quick start",
+    tabSource: "Install from source",
+    tabClaude: "Claude Desktop",
+    tabCodex: "Codex",
+    copy: "Copy",
+    copied: "Copied!",
+    termNoteMac: "Paste into Terminal. The command prepares the connection.",
+    termNoteWin: "Paste into PowerShell. The command prepares the connection.",
+    termNoteLinux: "Paste into Linux Terminal. The command configures Codex connection.",
+    termNoteSource: "Clone the GitHub repository, synchronize dependencies with uv, and authenticate locally.",
+    termNoteClaude: "Automatic stdio configuration for Claude Desktop on your computer.",
+    termNoteCodex: "Configure local stdio server for Codex or compatible development environments.",
+    trustText: "Personal account · Read-only access · Strictly local",
+    belowTerminal: "Local read-only installation. No intermediate servers or telemetry.",
+    dataStripLabel: "YOUR GARMIN, IN CONVERSATION",
+    metricActivities: "Activities & Laps",
+    metricSleep: "Sleep Stages",
+    metricHeart: "Heart Rate",
+    metricStress: "Stress & HRV",
+    metricBattery: "Body Battery",
+    metricTrends: "Trends up to 31d",
+    toolsSectionTitle: "Available MCP Tools",
+    toolsSectionDesc: "Five native read-only tools adhering to the Model Context Protocol standard.",
+    tool1Desc: "Check presence and local validity of session tokens without any network roundtrip.",
+    tool2Desc: "Fetch daily health summaries, granular sleep phases, resting HR, stress, and body battery.",
+    tool3Desc: "List recent workouts with pagination, sport types, distance, and duration metrics.",
+    tool4Desc: "Deep-dive into a specific activity with split times, elevation, and lap-by-lap heart rate.",
+    tool5Desc: "Extract historical time series from 1 to 31 days with automatic average calculations.",
+    guideEyebrow: "Few steps on your machine",
+    guideTitle: "From raw metrics to answers.",
+    step1Num: "01",
+    step1Title: "Choose your assistant",
+    step1Desc: "Claude Desktop or Codex. Select your operating system and run the quickstart script.",
+    step2Num: "02",
+    step2Title: "Local Garmin login",
+    step2Desc: "Authenticate via your local terminal. Access tokens remain encrypted on your device (0600).",
+    step3Num: "03",
+    step3Title: "Start chatting",
+    step3Desc: "Relaunch your AI client and ask questions about your health, activities, and recovery trends.",
+    examplePromptText: "“Use Garmin to analyze my sleep stages and stress trends over the last 7 days.”",
+    examplePromptAction: "Copy prompt ↗",
+    faqTitle: "Frequently Asked Questions",
+    faq1Q: "Can I connect directly from the web browser?",
+    faq1A: "No. The MCP server runs locally as a native stdio child process. This web page provides documentation and installation commands: execution happens solely on your personal computer.",
+    faq2Q: "Where are my credentials and biometric data stored?",
+    faq2A: "Your credentials are never sent to third-party servers. Login takes place directly between your terminal and Garmin Connect. Access tokens are stored in ~/.garmin-mcp with strict permissions (0700/0600).",
+    faq3Q: "Which AI clients are supported?",
+    faq3A: "Officially supports Claude Desktop (macOS & Windows) as well as Codex or any client compatible with the Model Context Protocol stdio specification.",
+    faq4Q: "Can this server modify or delete my data on Garmin Connect?",
+    faq4A: "Never. The server is strictly read-only: it provides zero APIs or capabilities to write, upload, modify, or erase data on Garmin Connect.",
+    footerText: "Garmin MCP · Independent Open Source Project",
+    footerSource: "Source ZIP",
+    footerRepo: "GitHub Repo",
+    footerLibrary: "Garmin Connect Library ↗",
+    modalTitle: "Installation Instructions",
+    modalStep1: "Run the quickstart command inside your local terminal:",
+    modalStep2: "Log in to Garmin Connect entering your email, password, and MFA code if prompted.",
+    modalStep3: "Relaunch Claude Desktop or Codex to register the new MCP server tools.",
+    close: "Close"
+  }
+};
+
+// Application State
+let currentLang = localStorage.getItem('garmin_mcp_lang') || 'it';
+let activeTab = 'quickstart';
+let currentOs = 'mac';
+
+// Detect initial OS
+const ua = navigator.userAgent;
+if (/Windows/i.test(ua)) {
+  currentOs = 'windows';
+} else if (/Linux/i.test(ua) && !/Android/i.test(ua)) {
+  currentOs = 'linux';
+} else {
+  currentOs = 'mac';
 }
-function notify(text) {
-  $('toast').textContent = text;
-  $('toast').classList.add('visible');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => $('toast').classList.remove('visible'), 4200);
+
+// Elements
+const el = id => document.getElementById(id);
+let toastTimeout;
+
+// Toast notification helper
+function showToast(message) {
+  const toast = el('toast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add('visible');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => {
+    toast.classList.remove('visible');
+  }, 3200);
 }
-async function copy(text, success) {
+
+// Safe Clipboard Copy Helper
+async function copyToClipboard(text, successMsg) {
   try {
-    await navigator.clipboard.writeText(text);
-    notify(success);
-    return true;
-  } catch {
-    const field = document.createElement('textarea');
-    field.value = text;
-    field.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
-    ($('setup-dialog').open ? $('setup-dialog') : document.body).append(field);
-    field.select();
-    const ok = document.execCommand('copy');
-    field.remove();
-    notify(ok ? success : 'Copie automatiche bloccate. Seleziona il comando e copialo manualmente.');
-    return ok;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+      showToast(successMsg);
+      return true;
+    }
+  } catch (err) {
+    console.warn('Clipboard API failed, fallback to textarea', err);
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.top = '0';
+  textarea.style.left = '0';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  const ok = document.execCommand('copy');
+  textarea.remove();
+  showToast(ok ? successMsg : 'Copy failed. Please copy manually.');
+  return ok;
+}
+
+// Generate command based on active tab and selected OS
+function getActiveCommand() {
+  switch (activeTab) {
+    case 'quickstart':
+      if (currentOs === 'windows') {
+        return `& ([scriptblock]::Create((irm '${BASE_URL}/downloads/install.ps1'))) -Client claude`;
+      }
+      if (currentOs === 'linux') {
+        return `curl -fsSL ${BASE_URL}/downloads/install.sh | bash -s -- codex`;
+      }
+      return `curl -fsSL ${BASE_URL}/downloads/install.sh | bash -s -- claude`;
+
+    case 'source':
+      return `git clone https://github.com/enricoarmiento/Garmin_MCP.git && cd Garmin_MCP && uv sync`;
+
+    case 'claude':
+      return `uv run garmin-mcp login && uv run garmin-mcp serve`;
+
+    case 'codex':
+      return `uv run garmin-mcp login && uv run garmin-mcp serve`;
+
+    default:
+      return `curl -fsSL ${BASE_URL}/downloads/install.sh | bash`;
   }
 }
-function render() {
-  const name = client === 'claude' ? 'Claude' : 'Codex';
-  const fullName = client === 'claude' ? 'Claude Desktop' : 'Codex';
-  const linux = $('os').value === 'linux';
-  document.querySelectorAll('[data-client]').forEach(tab => {
-    const selected = tab.dataset.client === client;
-    tab.setAttribute('aria-selected', String(selected));
-    tab.tabIndex = selected ? 0 : -1;
-  });
-  $('client-panel').setAttribute('aria-labelledby', `tab-${client}`);
-  $('connect-label').textContent = `Collega ${name}`;
-  $('connect-main').querySelector('.spark').textContent = client === 'claude' ? '✳' : '⌘';
-  $('terminal-label').textContent = `Configurazione · ${fullName}`;
-  $('command').textContent = command();
-  $('command-note').textContent = $('os').value === 'windows' ? 'Incolla in PowerShell. Il comando prepara il collegamento.' : 'Incolla nel Terminale. Il comando prepara il collegamento.';
-  $('dialog-title').textContent = `Collega ${name}`;
-  $('dialog-intro').textContent = $('os').value === 'windows' ? 'Apri PowerShell su Windows, poi segui questi passaggi.' : `Apri Terminale ${linux ? 'su Linux' : 'sul Mac'}, poi segui questi passaggi.`;
-  $('restart-step').textContent = `Chiudi e riapri ${fullName}.`;
-  $('installer-link').href = `/downloads/install.${$('os').value === 'windows' ? 'ps1' : 'sh'}`;
-}
-function selectClient(next) {
-  if (next === 'claude' && $('os').value === 'linux') {
-    notify('Per Claude Desktop scegli macOS o Windows. Su Linux è disponibile Codex.');
-    return;
+
+// Get helper note for current state
+function getActiveNote() {
+  const t = TRANSLATIONS[currentLang];
+  switch (activeTab) {
+    case 'quickstart':
+      if (currentOs === 'windows') return t.termNoteWin;
+      if (currentOs === 'linux') return t.termNoteLinux;
+      return t.termNoteMac;
+    case 'source':
+      return t.termNoteSource;
+    case 'claude':
+      return t.termNoteClaude;
+    case 'codex':
+      return t.termNoteCodex;
+    default:
+      return t.termNoteMac;
   }
-  client = next;
-  render();
 }
-document.querySelectorAll('[data-client]').forEach(tab => {
-  tab.addEventListener('click', () => selectClient(tab.dataset.client));
-  tab.addEventListener('keydown', e => {
-    if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) {
-      e.preventDefault();
-      selectClient(e.key === 'Home' ? 'claude' : e.key === 'End' ? 'codex' : client === 'claude' ? 'codex' : 'claude');
-      $(`tab-${client}`).focus();
+
+// Render UI strings & terminal
+function renderUI() {
+  const t = TRANSLATIONS[currentLang];
+  document.documentElement.lang = currentLang;
+
+  // Update all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(elem => {
+    const key = elem.getAttribute('data-i18n');
+    if (t[key] !== undefined) {
+      elem.textContent = t[key];
     }
   });
+
+  // Update Language switch buttons
+  const itBtn = el('btn-lang-it');
+  const enBtn = el('btn-lang-en');
+  if (itBtn && enBtn) {
+    itBtn.classList.toggle('active', currentLang === 'it');
+    enBtn.classList.toggle('active', currentLang === 'en');
+  }
+
+  // Update Terminal Tabs
+  document.querySelectorAll('.tab-pill').forEach(btn => {
+    const tabName = btn.getAttribute('data-tab');
+    const isSelected = tabName === activeTab;
+    btn.classList.toggle('active', isSelected);
+    btn.setAttribute('aria-selected', String(isSelected));
+  });
+
+  // Update OS pills
+  document.querySelectorAll('.os-pill').forEach(btn => {
+    const osName = btn.getAttribute('data-os');
+    btn.classList.toggle('active', osName === currentOs);
+  });
+
+  // Show or hide OS selector for tabs that don't need it
+  const osPillsContainer = el('os-pills');
+  if (osPillsContainer) {
+    osPillsContainer.style.display = (activeTab === 'quickstart') ? 'inline-flex' : 'none';
+  }
+
+  // Update Terminal Command and Note
+  const cmd = getActiveCommand();
+  const termCmdElem = el('term-command');
+  if (termCmdElem) termCmdElem.textContent = cmd;
+
+  const termNoteElem = el('term-note');
+  if (termNoteElem) termNoteElem.textContent = getActiveNote();
+
+  // Update Modal Code
+  const modalCode = el('modal-code');
+  if (modalCode) modalCode.textContent = cmd;
+}
+
+// Switch Language
+function setLanguage(lang) {
+  if (lang !== 'it' && lang !== 'en') return;
+  currentLang = lang;
+  localStorage.setItem('garmin_mcp_lang', lang);
+  renderUI();
+}
+
+// Switch Active Tab
+function setTab(tab) {
+  activeTab = tab;
+  renderUI();
+}
+
+// Switch Active OS
+function setOs(os) {
+  currentOs = os;
+  renderUI();
+}
+
+// Event Listeners Initialization
+function initEventListeners() {
+  // Language switcher
+  const itBtn = el('btn-lang-it');
+  const enBtn = el('btn-lang-en');
+  if (itBtn) itBtn.addEventListener('click', () => setLanguage('it'));
+  if (enBtn) enBtn.addEventListener('click', () => setLanguage('en'));
+
+  // Terminal Tab buttons
+  document.querySelectorAll('.tab-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setTab(btn.getAttribute('data-tab'));
+    });
+  });
+
+  // OS selector pills
+  document.querySelectorAll('.os-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setOs(btn.getAttribute('data-os'));
+    });
+  });
+
+  // Copy Terminal Command
+  const copyBtn = el('btn-copy');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const t = TRANSLATIONS[currentLang];
+      copyToClipboard(getActiveCommand(), `${t.copied} (${t.termNoteMac.slice(0, 20)}...)`);
+      const copyText = el('copy-text');
+      if (copyText) {
+        copyText.textContent = t.copied;
+        setTimeout(() => { copyText.textContent = t.copy; }, 1800);
+      }
+    });
+  }
+
+  // Copy Example Prompt
+  const copyPromptBtn = el('btn-copy-prompt');
+  if (copyPromptBtn) {
+    copyPromptBtn.addEventListener('click', () => {
+      const promptText = el('example-prompt-text').textContent.replace(/[“”"]/g, '').trim();
+      const t = TRANSLATIONS[currentLang];
+      copyToClipboard(promptText, t.copied);
+    });
+  }
+
+  // Modal Setup Dialog
+  const setupDialog = el('setup-dialog');
+  const modalOpenBtn = el('btn-modal-open');
+  const modalCloseBtn = el('modal-close');
+  const modalDismissBtn = el('modal-dismiss');
+  const modalCopyBtn = el('modal-copy-btn');
+
+  if (setupDialog) {
+    if (modalOpenBtn) {
+      modalOpenBtn.addEventListener('click', () => {
+        setupDialog.showModal();
+      });
+    }
+
+    const closeModal = () => setupDialog.close();
+    if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+    if (modalDismissBtn) modalDismissBtn.addEventListener('click', closeModal);
+
+    setupDialog.addEventListener('click', e => {
+      if (e.target === setupDialog) {
+        closeModal();
+      }
+    });
+
+    if (modalCopyBtn) {
+      modalCopyBtn.addEventListener('click', () => {
+        const t = TRANSLATIONS[currentLang];
+        copyToClipboard(getActiveCommand(), t.copied);
+      });
+    }
+  }
+}
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  initEventListeners();
+  renderUI();
 });
-$('os').addEventListener('change', () => {
-  if ($('os').value === 'linux') client = 'codex';
-  render();
-});
-$('copy-command').addEventListener('click', () => copy(command(), 'Comando copiato. Incollalo nel terminale per continuare.'));
-$('dialog-copy').addEventListener('click', () => copy(command(), 'Comando copiato. Ora eseguilo sul tuo computer.'));
-function showSetup() { render(); $('setup-dialog').showModal(); document.body.classList.add('modal-open'); }
-$('connect-main').addEventListener('click', showSetup);
-$('show-steps').addEventListener('click', showSetup);
-document.querySelector('.dialog-close').addEventListener('click', () => $('setup-dialog').close());
-$('setup-dialog').addEventListener('close', () => document.body.classList.remove('modal-open'));
-$('setup-dialog').addEventListener('click', e => { if (e.target === $('setup-dialog')) { const r = e.target.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) e.target.close(); } });
-$('copy-prompt').addEventListener('click', () => copy('Usa Garmin per analizzare il mio sonno degli ultimi 7 giorni.', 'Richiesta copiata. Incollala nel tuo assistente dopo il collegamento.'));
-render();
