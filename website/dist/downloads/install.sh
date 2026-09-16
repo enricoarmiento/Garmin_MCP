@@ -2,14 +2,14 @@
 # Garmin MCP installer. Installs uv/Python if needed, then authenticates locally.
 set -euo pipefail
 CLIENT="${1:-}"
-case "$CLIENT" in claude|codex) ;; *) echo 'Uso: install.sh claude|codex' >&2; exit 1;; esac
+case "$CLIENT" in claude|codex|antigravity|deepseek|dsh) ;; *) echo 'Uso: install.sh claude|codex|antigravity|deepseek' >&2; exit 1;; esac
 if [ "$(uname -s)" = Linux ] && [ "$CLIENT" = claude ]; then
-  echo 'Questo installer supporta Claude Desktop su macOS e Windows. Su Linux scegli Codex.' >&2; exit 1
+  echo 'Questo installer supporta Claude Desktop su macOS e Windows. Su Linux scegli Antigravity, DeepSeek o Codex.' >&2; exit 1
 fi
 if [ ! -r /dev/tty ]; then echo 'Apri un terminale interattivo per il login Garmin.' >&2; exit 1; fi
 BASE_URL='https://garmin-mcp-connect.enricoarmiento.chatgpt.site'
 WHEEL='garmin_readonly_mcp-0.1.0-py3-none-any.whl'
-SHA256='6afcc9a4e5ad4e062e5567d504420d57db71cecefd7707a8a1b7f7ba3243effd'
+SHA256='918f3164dedbca9504c12492b793dc21150821b016b38d7ab615e7c307680dfe'
 echo 'Garmin MCP — installazione locale per '"$CLIENT"
 echo 'Il login avviene con Garmin. Le credenziali non vengono inviate al sito.'
 if command -v uv >/dev/null 2>&1; then UV_EXE="$(command -v uv)";

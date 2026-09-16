@@ -13,13 +13,13 @@ from garmin_mcp.service import token_path
 def main() -> None:
     parser = argparse.ArgumentParser(description="Garmin Connect MCP — sola lettura")
     parser.add_argument("command", choices=["serve", "login", "connect"], nargs="?", default="serve")
-    parser.add_argument("client", choices=["claude", "codex"], nargs="?")
+    parser.add_argument("client", choices=["claude", "codex", "antigravity", "deepseek", "dsh"], nargs="?")
     args = parser.parse_args()
     # Suppress upstream log messages that may contain private request details.
     logging.getLogger("garminconnect").setLevel(logging.CRITICAL)
     if args.command == "connect":
         if not args.client:
-            parser.error("Specifica il client: garmin-mcp connect claude oppure codex")
+            parser.error("Specifica il client: garmin-mcp connect [claude|codex|antigravity|deepseek]")
         from garmin_mcp.connect import register
         try:
             path = register(args.client)

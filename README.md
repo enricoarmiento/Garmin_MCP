@@ -19,9 +19,16 @@ Per cambiare la cartella token, imposta `GARMIN_TOKEN_DIR` **sia nel terminale d
 
 ## Collegamento a un client MCP
 
-Importa o adatta [examples/mcp.json](examples/mcp.json) nelle impostazioni MCP del tuo client. Il file contiene il percorso assoluto di questa installazione; su un altro computer sostituiscilo con il percorso locale di `.venv/bin/garmin-mcp`.
+È possibile registrare automaticamente il server con il comando `connect`:
 
-Configurazione generica:
+```sh
+uv run garmin-mcp connect antigravity   # Per Google Antigravity IDE (~/.gemini/antigravity-ide/mcp_config.json)
+uv run garmin-mcp connect deepseek      # Per DeepSeek Harness (~/.dsh/mcp_config.json)
+uv run garmin-mcp connect claude        # Per Claude Desktop
+uv run garmin-mcp connect codex         # Per Codex (~/.codex/config.toml)
+```
+
+Oppure importa o adatta [examples/mcp.json](examples/mcp.json) nelle impostazioni MCP del tuo client:
 
 ```json
 {

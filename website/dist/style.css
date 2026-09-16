@@ -342,11 +342,12 @@ button, input, select {
   border: 1px solid transparent;
   border-bottom: none;
   border-radius: 10px 10px 0 0;
-  padding: 10px 18px;
-  font-size: 14px;
+  padding: 8px 13px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-muted);
   cursor: pointer;
+  white-space: nowrap;
   transition: all 0.2s ease;
 }
 
@@ -400,7 +401,40 @@ button, input, select {
 .terminal-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.client-pills {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.client-pill {
+  background: transparent;
+  border: 1px solid transparent;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.client-pill:hover {
+  color: var(--text-pure);
+}
+
+.client-pill.active {
+  background: rgba(56, 189, 248, 0.18);
+  color: #7dd3fc;
+  font-weight: 600;
+  border-color: rgba(56, 189, 248, 0.35);
 }
 
 .os-pills {

@@ -133,12 +133,14 @@
 
       <!-- Right Column: Interactive Terminal Box with DeepSeek Tabs & Dots -->
       <div class="hero-right">
-        <!-- Top Tabs (Quick start / Install from source / Claude / Codex) -->
+        <!-- Top Tabs (Quick start / Antigravity / DeepSeek / Claude / Codex / Source) -->
         <div class="terminal-tab-nav" role="tablist" aria-label="Installation mode">
           <button class="tab-pill active" id="tab-quickstart" role="tab" aria-selected="true" aria-controls="term-panel" data-tab="quickstart" data-i18n="tabQuickstart">Quick start</button>
-          <button class="tab-pill" id="tab-source" role="tab" aria-selected="false" aria-controls="term-panel" tabindex="-1" data-tab="source" data-i18n="tabSource">Install from source</button>
+          <button class="tab-pill" id="tab-antigravity" role="tab" aria-selected="false" aria-controls="term-panel" tabindex="-1" data-tab="antigravity">Antigravity</button>
+          <button class="tab-pill" id="tab-deepseek" role="tab" aria-selected="false" aria-controls="term-panel" tabindex="-1" data-tab="deepseek">DeepSeek</button>
           <button class="tab-pill" id="tab-claude" role="tab" aria-selected="false" aria-controls="term-panel" tabindex="-1" data-tab="claude" data-i18n="tabClaude">Claude Desktop</button>
           <button class="tab-pill" id="tab-codex" role="tab" aria-selected="false" aria-controls="term-panel" tabindex="-1" data-tab="codex" data-i18n="tabCodex">Codex</button>
+          <button class="tab-pill" id="tab-source" role="tab" aria-selected="false" aria-controls="term-panel" tabindex="-1" data-tab="source" data-i18n="tabSource">Source</button>
         </div>
 
         <!-- Terminal Window Card -->
@@ -150,8 +152,15 @@
               <span class="dot green"></span>
             </div>
 
-            <!-- Terminal controls (OS Switcher + Copy Button) -->
+            <!-- Terminal controls (Client Selector + OS Switcher + Copy Button) -->
             <div class="terminal-actions">
+              <div class="client-pills" id="client-pills" role="group" aria-label="Target Assistant">
+                <button type="button" class="client-pill active" data-client="antigravity">Antigravity</button>
+                <button type="button" class="client-pill" data-client="deepseek">DeepSeek</button>
+                <button type="button" class="client-pill" data-client="claude">Claude</button>
+                <button type="button" class="client-pill" data-client="codex">Codex</button>
+              </div>
+
               <div class="os-pills" id="os-pills" role="group" aria-label="Operating system">
                 <button type="button" class="os-pill active" data-os="mac">macOS</button>
                 <button type="button" class="os-pill" data-os="windows">Windows</button>
@@ -171,9 +180,9 @@
           <div class="terminal-body">
             <div class="code-line">
               <span class="cmd-prompt" aria-hidden="true">$</span>
-              <code id="term-command" class="cmd-text">curl -fsSL https://garmin-mcp-connect.enricoarmiento.chatgpt.site/downloads/install.sh | bash -s -- claude</code>
+              <code id="term-command" class="cmd-text">curl -fsSL https://garmin-mcp-connect.enricoarmiento.chatgpt.site/downloads/install.sh | bash -s -- antigravity</code>
             </div>
-            <p class="term-note" id="term-note" data-i18n="termNoteMac">Paste into Terminal. The command prepares the connection.</p>
+            <p class="term-note" id="term-note" data-i18n="termNoteAntigravity">Incolla nel Terminale. Configura Garmin MCP in Google Antigravity IDE.</p>
           </div>
 
           <div class="terminal-footer">

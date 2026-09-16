@@ -1,1 +1,1 @@
-6afcc9a4e5ad4e062e5567d504420d57db71cecefd7707a8a1b7f7ba3243effd  garmin_readonly_mcp-0.1.0-py3-none-any.whl
+918f3164dedbca9504c12492b793dc21150821b016b38d7ab615e7c307680dfe  garmin_readonly_mcp-0.1.0-py3-none-any.whl

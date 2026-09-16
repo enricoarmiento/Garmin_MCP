@@ -2,8 +2,8 @@
 
 Static, public installation page. `dist/` is authored source and the deployable output; no bundler required.
 
-- Client choice: Claude Desktop or Codex.
-- Platforms: macOS and Windows, plus Linux for Codex.
+- Client choice: Google Antigravity, DeepSeek Harness, Claude Desktop, or Codex.
+- Platforms: macOS and Windows, plus Linux for Antigravity, DeepSeek, and Codex.
 - Installation is an explicit command the visitor runs locally. The website does not launch native processes or claim a live connection.
 - Installers provision uv/Python, download the included wheel, verify SHA-256, authenticate directly with Garmin, then configure the selected client.
 - The packaged `connect` command preserves other client settings and writes a private backup before changing an existing configuration.

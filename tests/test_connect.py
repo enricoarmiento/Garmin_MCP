@@ -31,13 +31,30 @@ def test_codex_preserves_comments_and_other_servers(tmp_path):
     assert result["mcp_servers"]["garmin"]["enabled"] is True
 
 
-@pytest.mark.parametrize("client,suffix", [("claude", "json"), ("codex", "toml")])
+@pytest.mark.parametrize("client,suffix", [("claude", "json"), ("codex", "toml"), ("antigravity", "json"), ("deepseek", "json")])
 def test_invalid_config_is_never_overwritten(tmp_path, client, suffix):
     path = tmp_path / f"config.{suffix}"
     path.write_text("broken[[{")
     with pytest.raises(Exception):
         register(client, path)
     assert path.read_text() == "broken[[{"
+
+
+def test_antigravity_registers_cleanly(tmp_path):
+    path = tmp_path / "mcp_config.json"
+    path.write_text('{"mcpServers": {"existing": {"command": "test"}}}')
+    register("antigravity", path)
+    data = json.loads(path.read_text())
+    assert "garmin" in data["mcpServers"]
+    assert data["mcpServers"]["existing"]["command"] == "test"
+
+
+def test_deepseek_registers_cleanly(tmp_path):
+    path = tmp_path / "mcp_config.json"
+    path.write_text('{"mcpServers": {}}')
+    register("deepseek", path)
+    data = json.loads(path.read_text())
+    assert "garmin" in data["mcpServers"]
 
 
 def test_new_config_and_no_personal_paths_in_distribution(tmp_path):

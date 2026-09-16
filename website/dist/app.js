@@ -7,26 +7,28 @@ const BASE_URL = 'https://garmin-mcp-connect.enricoarmiento.chatgpt.site';
 const TRANSLATIONS = {
   it: {
     previewBadge: "Preview",
-    eyebrow: "Garmin MCP anteprima sviluppatori",
+    eyebrow: "Garmin MCP developer preview",
     heroTitle: "I tuoi dati, in conversazione",
-    heroSubtitle1: "Garmin MCP è disponibile in anteprima per assistenti AI e flussi con agenti — codice sorgente locale incluso.",
-    heroSubtitle2: "Ogni metrica è uno strumento interrogabile con privacy locale: attività, fasi del sonno, battito cardiaco, stress, body battery e trend a 30 giorni direttamente in Claude e Codex.",
+    heroSubtitle1: "Garmin MCP è disponibile in anteprima per Google Antigravity, DeepSeek Harness, Claude e Codex — codice sorgente locale incluso.",
+    heroSubtitle2: "Ogni metrica è uno strumento interrogabile con privacy locale: attività, fasi del sonno, battito cardiaco, stress, body battery e trend a 30 giorni direttamente nel tuo assistente AI preferito.",
     btnGithub: "Vedi su GitHub",
     btnDocs: "Guida setup",
     btnTools: "Strumenti MCP",
     btnDownload: "Scarica sorgenti",
     tabQuickstart: "Avvio rapido",
-    tabSource: "Installa da sorgente",
+    tabSource: "Sorgente",
     tabClaude: "Claude Desktop",
     tabCodex: "Codex",
     copy: "Copia",
     copied: "Copiato!",
     termNoteMac: "Incolla nel Terminale. Il comando prepara il collegamento.",
     termNoteWin: "Incolla in PowerShell. Il comando prepara il collegamento.",
-    termNoteLinux: "Incolla nel Terminale Linux. Il comando prepara il collegamento per Codex.",
-    termNoteSource: "Clona il repository GitHub, sincronizza le dipendenze con uv ed effettua il login locale.",
+    termNoteLinux: "Incolla nel Terminale Linux. Il comando prepara il collegamento.",
+    termNoteAntigravity: "Configura Garmin MCP in Google Antigravity IDE (~/.gemini/antigravity-ide/mcp_config.json).",
+    termNoteDeepseek: "Configura Garmin MCP per DeepSeek Harness (~/.dsh/mcp_config.json o dsh CLI).",
     termNoteClaude: "Configurazione automatica del server locale stdio per Claude Desktop.",
-    termNoteCodex: "Configurazione del server stdio per Codex o ambienti di sviluppo compatibili.",
+    termNoteCodex: "Configurazione del server stdio per Codex (~/.codex/config.toml).",
+    termNoteSource: "Clona il repository GitHub, sincronizza le dipendenze con uv ed effettua il login locale.",
     trustText: "Account personale · Accesso sola lettura · Dati locali",
     belowTerminal: "Installazione locale in sola lettura. Nessun server intermedio né tracciamento.",
     dataStripLabel: "IL TUO GARMIN, IN CONVERSAZIONE",
@@ -47,7 +49,7 @@ const TRANSLATIONS = {
     guideTitle: "Dai numeri alle risposte.",
     step1Num: "01",
     step1Title: "Scegli il tuo assistente",
-    step1Desc: "Claude Desktop o Codex. Seleziona il tuo sistema operativo ed esegui il comando rapido.",
+    step1Desc: "Google Antigravity, DeepSeek Harness, Claude Desktop o Codex. Seleziona il client e il tuo sistema operativo.",
     step2Num: "02",
     step2Title: "Accedi a Garmin in locale",
     step2Desc: "Esegui il login nel tuo terminale. I token rimangono crittografati sul tuo computer (0600).",
@@ -62,7 +64,7 @@ const TRANSLATIONS = {
     faq2Q: "Dove vengono salvate le credenziali e i miei dati sanitari?",
     faq2A: "Le tue credenziali non vengono mai inviate a server terzi. Il login avviene direttamente tra il tuo terminale e Garmin Connect. I token sono salvati nella cartella locale ~/.garmin-mcp protetta con permessi restrittivi (0700/0600).",
     faq3Q: "Quali client sono supportati?",
-    faq3A: "Supporta ufficialmente Claude Desktop (macOS e Windows) e Codex / qualsiasi altro client compatibile con le specifiche Model Context Protocol (stdio).",
+    faq3A: "Supporta ufficialmente Google Antigravity IDE, DeepSeek Harness, Claude Desktop (macOS e Windows) e Codex / qualsiasi altro client compatibile con le specifiche Model Context Protocol (stdio).",
     faq4Q: "Il server può modificare o cancellare i miei dati su Garmin?",
     faq4A: "Assolutamente no. Il server è strettamente in sola lettura (read-only): non contiene alcuna API per inviare, modificare o cancellare attività o metriche su Garmin Connect.",
     footerText: "Garmin MCP · Progetto Open Source indipendente",
@@ -72,31 +74,33 @@ const TRANSLATIONS = {
     modalTitle: "Istruzioni di installazione",
     modalStep1: "Esegui il comando di avvio rapido nel tuo terminale locale:",
     modalStep2: "Effettua il login a Garmin Connect inserendo credenziali e codice MFA se richiesto.",
-    modalStep3: "Riavvia Claude Desktop o Codex per iniziare a interrogare i tuoi dati.",
+    modalStep3: "Riavvia Google Antigravity, DeepSeek Harness, Claude o Codex per caricare i nuovi strumenti.",
     close: "Chiudi"
   },
   en: {
     previewBadge: "Preview",
     eyebrow: "Garmin MCP developer preview",
     heroTitle: "Everything is a tool",
-    heroSubtitle1: "Garmin MCP is now in developer preview for agent harness developers and AI assistants worldwide — source code included.",
+    heroSubtitle1: "Garmin MCP is now in developer preview for Google Antigravity, DeepSeek Harness, Claude, and Codex — source code included.",
     heroSubtitle2: "Every capability is a plugin that can be swapped or queried: daily summaries, sleep stages, heart rate, stress, body battery, activities, and 30-day trends.",
     btnGithub: "View on GitHub",
     btnDocs: "Developer docs",
     btnTools: "MCP Tools",
     btnDownload: "Download package",
     tabQuickstart: "Quick start",
-    tabSource: "Install from source",
+    tabSource: "Source",
     tabClaude: "Claude Desktop",
     tabCodex: "Codex",
     copy: "Copy",
     copied: "Copied!",
     termNoteMac: "Paste into Terminal. The command prepares the connection.",
     termNoteWin: "Paste into PowerShell. The command prepares the connection.",
-    termNoteLinux: "Paste into Linux Terminal. The command configures Codex connection.",
-    termNoteSource: "Clone the GitHub repository, synchronize dependencies with uv, and authenticate locally.",
+    termNoteLinux: "Paste into Linux Terminal. The command prepares the connection.",
+    termNoteAntigravity: "Configures Garmin MCP in Google Antigravity IDE (~/.gemini/antigravity-ide/mcp_config.json).",
+    termNoteDeepseek: "Configures Garmin MCP for DeepSeek Harness (~/.dsh/mcp_config.json or dsh CLI).",
     termNoteClaude: "Automatic stdio configuration for Claude Desktop on your computer.",
-    termNoteCodex: "Configure local stdio server for Codex or compatible development environments.",
+    termNoteCodex: "Configure local stdio server for Codex (~/.codex/config.toml).",
+    termNoteSource: "Clone the GitHub repository, synchronize dependencies with uv, and authenticate locally.",
     trustText: "Personal account · Read-only access · Strictly local",
     belowTerminal: "Local read-only installation. No intermediate servers or telemetry.",
     dataStripLabel: "YOUR GARMIN, IN CONVERSATION",
@@ -117,7 +121,7 @@ const TRANSLATIONS = {
     guideTitle: "From raw metrics to answers.",
     step1Num: "01",
     step1Title: "Choose your assistant",
-    step1Desc: "Claude Desktop or Codex. Select your operating system and run the quickstart script.",
+    step1Desc: "Google Antigravity, DeepSeek Harness, Claude Desktop, or Codex. Select your client and operating system.",
     step2Num: "02",
     step2Title: "Local Garmin login",
     step2Desc: "Authenticate via your local terminal. Access tokens remain encrypted on your device (0600).",
@@ -132,7 +136,7 @@ const TRANSLATIONS = {
     faq2Q: "Where are my credentials and biometric data stored?",
     faq2A: "Your credentials are never sent to third-party servers. Login takes place directly between your terminal and Garmin Connect. Access tokens are stored in ~/.garmin-mcp with strict permissions (0700/0600).",
     faq3Q: "Which AI clients are supported?",
-    faq3A: "Officially supports Claude Desktop (macOS & Windows) as well as Codex or any client compatible with the Model Context Protocol stdio specification.",
+    faq3A: "Officially supports Google Antigravity IDE, DeepSeek Harness, Claude Desktop (macOS & Windows), and Codex or any client compatible with the Model Context Protocol stdio specification.",
     faq4Q: "Can this server modify or delete my data on Garmin Connect?",
     faq4A: "Never. The server is strictly read-only: it provides zero APIs or capabilities to write, upload, modify, or erase data on Garmin Connect.",
     footerText: "Garmin MCP · Independent Open Source Project",
@@ -142,7 +146,7 @@ const TRANSLATIONS = {
     modalTitle: "Installation Instructions",
     modalStep1: "Run the quickstart command inside your local terminal:",
     modalStep2: "Log in to Garmin Connect entering your email, password, and MFA code if prompted.",
-    modalStep3: "Relaunch Claude Desktop or Codex to register the new MCP server tools.",
+    modalStep3: "Relaunch Google Antigravity, DeepSeek Harness, Claude, or Codex to register the new MCP server tools.",
     close: "Close"
   }
 };
@@ -150,6 +154,7 @@ const TRANSLATIONS = {
 // Application State
 let currentLang = localStorage.getItem('garmin_mcp_lang') || 'it';
 let activeTab = 'quickstart';
+let targetClient = 'antigravity';
 let currentOs = 'mac';
 
 // Detect initial OS
@@ -162,7 +167,7 @@ if (/Windows/i.test(ua)) {
   currentOs = 'mac';
 }
 
-// Elements
+// Elements helper
 const el = id => document.getElementById(id);
 let toastTimeout;
 
@@ -187,7 +192,7 @@ async function copyToClipboard(text, successMsg) {
       return true;
     }
   } catch (err) {
-    console.warn('Clipboard API failed, fallback to textarea', err);
+    console.warn('Clipboard API fallback', err);
   }
 
   const textarea = document.createElement('textarea');
@@ -204,26 +209,29 @@ async function copyToClipboard(text, successMsg) {
   return ok;
 }
 
-// Generate command based on active tab and selected OS
+// Generate command based on active tab, selected client, and OS
 function getActiveCommand() {
   switch (activeTab) {
     case 'quickstart':
       if (currentOs === 'windows') {
-        return `& ([scriptblock]::Create((irm '${BASE_URL}/downloads/install.ps1'))) -Client claude`;
+        return `& ([scriptblock]::Create((irm '${BASE_URL}/downloads/install.ps1'))) -Client ${targetClient}`;
       }
-      if (currentOs === 'linux') {
-        return `curl -fsSL ${BASE_URL}/downloads/install.sh | bash -s -- codex`;
-      }
-      return `curl -fsSL ${BASE_URL}/downloads/install.sh | bash -s -- claude`;
+      return `curl -fsSL ${BASE_URL}/downloads/install.sh | bash -s -- ${targetClient}`;
 
-    case 'source':
-      return `git clone https://github.com/enricoarmiento/Garmin_MCP.git && cd Garmin_MCP && uv sync`;
+    case 'antigravity':
+      return `uv run garmin-mcp login && uv run garmin-mcp connect antigravity`;
+
+    case 'deepseek':
+      return `npx @deepseek-ai/dsh mcp add garmin "garmin-mcp serve" || (uv run garmin-mcp login && uv run garmin-mcp connect deepseek)`;
 
     case 'claude':
-      return `uv run garmin-mcp login && uv run garmin-mcp serve`;
+      return `uv run garmin-mcp login && uv run garmin-mcp connect claude`;
 
     case 'codex':
-      return `uv run garmin-mcp login && uv run garmin-mcp serve`;
+      return `uv run garmin-mcp login && uv run garmin-mcp connect codex`;
+
+    case 'source':
+      return `git clone https://github.com/enricoarmiento/Garmin_MCP.git && cd Garmin_MCP && uv sync && uv run garmin-mcp login`;
 
     default:
       return `curl -fsSL ${BASE_URL}/downloads/install.sh | bash`;
@@ -235,15 +243,22 @@ function getActiveNote() {
   const t = TRANSLATIONS[currentLang];
   switch (activeTab) {
     case 'quickstart':
+      if (targetClient === 'antigravity') return t.termNoteAntigravity;
+      if (targetClient === 'deepseek') return t.termNoteDeepseek;
+      if (targetClient === 'claude') return t.termNoteClaude;
+      if (targetClient === 'codex') return t.termNoteCodex;
       if (currentOs === 'windows') return t.termNoteWin;
-      if (currentOs === 'linux') return t.termNoteLinux;
       return t.termNoteMac;
-    case 'source':
-      return t.termNoteSource;
+    case 'antigravity':
+      return t.termNoteAntigravity;
+    case 'deepseek':
+      return t.termNoteDeepseek;
     case 'claude':
       return t.termNoteClaude;
     case 'codex':
       return t.termNoteCodex;
+    case 'source':
+      return t.termNoteSource;
     default:
       return t.termNoteMac;
   }
@@ -278,17 +293,25 @@ function renderUI() {
     btn.setAttribute('aria-selected', String(isSelected));
   });
 
+  // Update Client pills
+  document.querySelectorAll('.client-pill').forEach(btn => {
+    const clientName = btn.getAttribute('data-client');
+    btn.classList.toggle('active', clientName === targetClient);
+  });
+
   // Update OS pills
   document.querySelectorAll('.os-pill').forEach(btn => {
     const osName = btn.getAttribute('data-os');
     btn.classList.toggle('active', osName === currentOs);
   });
 
-  // Show or hide OS selector for tabs that don't need it
+  // Show or hide Client & OS selector
+  const clientPillsContainer = el('client-pills');
   const osPillsContainer = el('os-pills');
-  if (osPillsContainer) {
-    osPillsContainer.style.display = (activeTab === 'quickstart') ? 'inline-flex' : 'none';
-  }
+  const isQuickstart = activeTab === 'quickstart';
+
+  if (clientPillsContainer) clientPillsContainer.style.display = isQuickstart ? 'inline-flex' : 'none';
+  if (osPillsContainer) osPillsContainer.style.display = isQuickstart ? 'inline-flex' : 'none';
 
   // Update Terminal Command and Note
   const cmd = getActiveCommand();
@@ -317,6 +340,12 @@ function setTab(tab) {
   renderUI();
 }
 
+// Switch Target Client (in Quick start)
+function setClient(client) {
+  targetClient = client;
+  renderUI();
+}
+
 // Switch Active OS
 function setOs(os) {
   currentOs = os;
@@ -338,6 +367,13 @@ function initEventListeners() {
     });
   });
 
+  // Client selector pills
+  document.querySelectorAll('.client-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setClient(btn.getAttribute('data-client'));
+    });
+  });
+
   // OS selector pills
   document.querySelectorAll('.os-pill').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -350,7 +386,7 @@ function initEventListeners() {
   if (copyBtn) {
     copyBtn.addEventListener('click', () => {
       const t = TRANSLATIONS[currentLang];
-      copyToClipboard(getActiveCommand(), `${t.copied} (${t.termNoteMac.slice(0, 20)}...)`);
+      copyToClipboard(getActiveCommand(), t.copied);
       const copyText = el('copy-text');
       if (copyText) {
         copyText.textContent = t.copied;
