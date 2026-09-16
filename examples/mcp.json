@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "garmin": {
+      "command": "/Users/enricoarmiento/Desktop/Progetti_AI/Garmin_MCP/.venv/bin/garmin-mcp",
+      "args": ["serve"]
+    }
+  }
+}
