@@ -7,7 +7,7 @@ if [ "$(uname -s)" = Linux ] && [ "$CLIENT" = claude ]; then
   echo 'Questo installer supporta Claude Desktop su macOS e Windows. Su Linux scegli Antigravity, DeepSeek o Codex.' >&2; exit 1
 fi
 if [ ! -r /dev/tty ]; then echo 'Apri un terminale interattivo per il login Garmin.' >&2; exit 1; fi
-BASE_URL='https://garmin-mcp-connect.enricoarmiento.chatgpt.site'
+BASE_URL='https://raw.githubusercontent.com/enricoarmiento/Garmin_MCP/main/website/dist'
 WHEEL='garmin_readonly_mcp-0.1.0-py3-none-any.whl'
 SHA256='918f3164dedbca9504c12492b793dc21150821b016b38d7ab615e7c307680dfe'
 echo 'Garmin MCP — installazione locale per '"$CLIENT"

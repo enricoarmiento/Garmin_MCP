@@ -1,158 +1,199 @@
 'use strict';
 
-// Base download URL for installers
-const BASE_URL = 'https://garmin-mcp-connect.enricoarmiento.chatgpt.site';
+// Use the deployed site; local previews use the public source downloads.
+const BASE_URL = window.location.protocol === 'https:'
+  ? window.location.origin
+  : 'https://raw.githubusercontent.com/enricoarmiento/Garmin_MCP/main/website/dist';
 
 // Bilingual translations dictionary (Italian & English)
 const TRANSLATIONS = {
-  it: {
-    previewBadge: "Preview",
-    eyebrow: "Garmin MCP developer preview",
-    heroTitle: "I tuoi dati, in conversazione",
-    heroSubtitle1: "Garmin MCP è disponibile in anteprima per Google Antigravity, DeepSeek Harness, Claude e Codex — codice sorgente locale incluso.",
-    heroSubtitle2: "Ogni metrica è uno strumento interrogabile con privacy locale: attività, fasi del sonno, battito cardiaco, stress, body battery e trend a 30 giorni direttamente nel tuo assistente AI preferito.",
-    btnGithub: "Vedi su GitHub",
-    btnDocs: "Guida setup",
-    btnTools: "Strumenti MCP",
-    btnDownload: "Scarica sorgenti",
-    tabQuickstart: "Avvio rapido",
-    tabSource: "Sorgente",
-    tabClaude: "Claude Desktop",
-    tabCodex: "Codex",
-    copy: "Copia",
-    copied: "Copiato!",
-    termNoteMac: "Incolla nel Terminale. Il comando prepara il collegamento.",
-    termNoteWin: "Incolla in PowerShell. Il comando prepara il collegamento.",
-    termNoteLinux: "Incolla nel Terminale Linux. Il comando prepara il collegamento.",
-    termNoteAntigravity: "Configura Garmin MCP in Google Antigravity IDE (~/.gemini/antigravity-ide/mcp_config.json).",
-    termNoteDeepseek: "Configura Garmin MCP per DeepSeek Harness (~/.dsh/mcp_config.json o dsh CLI).",
-    termNoteClaude: "Configurazione automatica del server locale stdio per Claude Desktop.",
-    termNoteCodex: "Configurazione del server stdio per Codex (~/.codex/config.toml).",
-    termNoteSource: "Clona il repository GitHub, sincronizza le dipendenze con uv ed effettua il login locale.",
-    trustText: "Account personale · Accesso sola lettura · Dati locali",
-    belowTerminal: "Installazione locale in sola lettura. Nessun server intermedio né tracciamento.",
-    dataStripLabel: "IL TUO GARMIN, IN CONVERSAZIONE",
-    metricActivities: "Attività e giri",
-    metricSleep: "Fasi del sonno",
-    metricHeart: "Battito cardiaco",
-    metricStress: "Stress & HRV",
-    metricBattery: "Body Battery",
-    metricTrends: "Trend fino a 31gg",
-    toolsSectionTitle: "Strumenti MCP disponibili",
-    toolsSectionDesc: "Cinque strumenti nativi pronti all'uso per il protocollo Model Context Protocol.",
-    tool1Desc: "Verifica locale della validità dei token di sessione senza chiamate di rete.",
-    tool2Desc: "Recupera riepilogo giornaliero, sonno dettagliato, battito, stress e body battery.",
-    tool3Desc: "Elenco delle attività recenti con paginazione, tipo sport e metriche aggregate.",
-    tool4Desc: "Dettaglio completo della singola sessione con giri, split e frequenze cardiache.",
-    tool5Desc: "Analisi di serie storiche e andamenti da 1 a 31 giorni con calcolo medie.",
-    guideEyebrow: "Pochi passi, sul tuo computer",
-    guideTitle: "Dai numeri alle risposte.",
-    step1Num: "01",
-    step1Title: "Scegli il tuo assistente",
-    step1Desc: "Google Antigravity, DeepSeek Harness, Claude Desktop o Codex. Seleziona il client e il tuo sistema operativo.",
-    step2Num: "02",
-    step2Title: "Accedi a Garmin in locale",
-    step2Desc: "Esegui il login nel tuo terminale. I token rimangono crittografati sul tuo computer (0600).",
-    step3Num: "03",
-    step3Title: "Inizia a conversare",
-    step3Desc: "Riavvia il client AI e chiedi di analizzare i tuoi dati biometrici e le attività sportive.",
-    examplePromptText: "“Usa Garmin per analizzare il mio sonno e il trend di stress degli ultimi 7 giorni.”",
-    examplePromptAction: "Copia richiesta ↗",
-    faqTitle: "Domande frequenti",
-    faq1Q: "Posso collegarlo direttamente dal browser?",
-    faq1A: "No. Il server MCP è un processo locale avviato via stdio. Il browser serve solo per consultare la documentazione o scaricare l'installer: l'esecuzione avviene unicamente sulla tua macchina.",
-    faq2Q: "Dove vengono salvate le credenziali e i miei dati sanitari?",
-    faq2A: "Le tue credenziali non vengono mai inviate a server terzi. Il login avviene direttamente tra il tuo terminale e Garmin Connect. I token sono salvati nella cartella locale ~/.garmin-mcp protetta con permessi restrittivi (0700/0600).",
-    faq3Q: "Quali client sono supportati?",
-    faq3A: "Supporta ufficialmente Google Antigravity IDE, DeepSeek Harness, Claude Desktop (macOS e Windows) e Codex / qualsiasi altro client compatibile con le specifiche Model Context Protocol (stdio).",
-    faq4Q: "Il server può modificare o cancellare i miei dati su Garmin?",
-    faq4A: "Assolutamente no. Il server è strettamente in sola lettura (read-only): non contiene alcuna API per inviare, modificare o cancellare attività o metriche su Garmin Connect.",
-    footerText: "Garmin MCP · Progetto Open Source indipendente",
-    footerSource: "Sorgente ZIP",
-    footerRepo: "GitHub Repo",
-    footerLibrary: "Libreria Garmin Connect ↗",
-    modalTitle: "Istruzioni di installazione",
-    modalStep1: "Esegui il comando di avvio rapido nel tuo terminale locale:",
-    modalStep2: "Effettua il login a Garmin Connect inserendo credenziali e codice MFA se richiesto.",
-    modalStep3: "Riavvia Google Antigravity, DeepSeek Harness, Claude o Codex per caricare i nuovi strumenti.",
-    close: "Chiudi"
+  "it": {
+    "previewBadge": "Strumenti in sola lettura",
+    "eyebrow": "Garmin Connect / MCP",
+    "heroTitle": "I tuoi dati Garmin. Nel tuo assistente.",
+    "heroSubtitle1": "Collega attività, sonno e recupero a Google Antigravity, DeepSeek Harness, Claude o Codex.",
+    "heroSubtitle2": "Un server MCP sul tuo computer, cinque strumenti in sola lettura. Codice aperto, nessuna modifica al tuo account Garmin.",
+    "btnGithub": "Vedi su GitHub",
+    "btnDocs": "Installazione",
+    "btnTools": "Strumenti MCP",
+    "btnDownload": "Scarica sorgenti",
+    "tabQuickstart": "Avvio rapido",
+    "tabSource": "Da sorgenti",
+    "copy": "Copia",
+    "copied": "Copiato!",
+    "termNoteMac": "Incolla nel Terminale. Il comando prepara il collegamento.",
+    "termNoteWin": "Incolla in PowerShell. Il comando prepara il collegamento.",
+    "termNoteLinux": "Incolla nel Terminale Linux. Il comando prepara il collegamento.",
+    "termNoteAntigravity": "Configura Garmin MCP in Google Antigravity IDE (~/.gemini/antigravity-ide/mcp_config.json).",
+    "termNoteDeepseek": "Configura Garmin MCP per DeepSeek Harness (~/.dsh/mcp_config.json o dsh CLI).",
+    "termNoteClaude": "Configurazione automatica del server locale stdio per Claude Desktop.",
+    "termNoteCodex": "Configurazione del server stdio per Codex (~/.codex/config.toml).",
+    "termNoteSource": "Clona il repository GitHub, sincronizza le dipendenze con uv ed effettua il login locale.",
+    "trustText": "Account personale · Sola lettura",
+    "belowTerminal": "Il server gira sul tuo computer. I dati richiesti vengono condivisi con l’assistente che scegli.",
+    "dataStripLabel": "DATI DISPONIBILI",
+    "metricActivities": "Attività e giri",
+    "metricSleep": "Fasi del sonno",
+    "metricHeart": "Battito cardiaco",
+    "metricStress": "Stress e HRV",
+    "metricBattery": "Body Battery",
+    "metricTrends": "Trend fino a 31 giorni",
+    "toolsSectionTitle": "Cinque strumenti. I dati che servono.",
+    "toolsSectionDesc": "Dal riepilogo della giornata ai dettagli di una singola attività.",
+    "tool1Desc": "Controlla la presenza dei token di accesso sul computer, senza chiamate di rete.",
+    "tool2Desc": "Consulta il riepilogo giornaliero: sonno, frequenza cardiaca, stress e Body Battery.",
+    "tool3Desc": "Elenca le attività recenti con sport, distanza e durata.",
+    "tool4Desc": "Esplora una singola attività, con dettagli, giri e tempi parziali.",
+    "tool5Desc": "Confronta dati e medie su un intervallo da 1 a 31 giorni.",
+    "guideEyebrow": "CONFIGURAZIONE",
+    "guideTitle": "Dal tuo Garmin al tuo assistente.",
+    "step1Num": "01",
+    "step1Title": "Scegli il tuo assistente",
+    "step1Desc": "Seleziona assistente e sistema operativo, poi copia il comando di avvio rapido.",
+    "step2Num": "02",
+    "step2Title": "Accedi a Garmin in locale",
+    "step2Desc": "Esegui il comando nel terminale e accedi a Garmin Connect. I token di accesso vengono salvati sul tuo computer.",
+    "step3Num": "03",
+    "step3Title": "Inizia a conversare",
+    "step3Desc": "Riavvia l’assistente e chiedi un riepilogo del sonno, delle attività o del recupero.",
+    "examplePromptText": "“Come sono cambiati sonno e stress negli ultimi 7 giorni?”",
+    "examplePromptAction": "Copia esempio",
+    "faqTitle": "Domande frequenti",
+    "faq1Q": "Posso collegarlo direttamente dal browser?",
+    "faq1A": "No. Questa pagina fornisce i comandi e la guida. Il server MCP viene installato e avviato sul tuo computer dal tuo assistente.",
+    "faq2Q": "Dove vengono salvate le credenziali e i miei dati sanitari?",
+    "faq2A": "Accedi direttamente a Garmin Connect dal terminale. I token vengono salvati nella cartella ~/.garmin-mcp sul tuo computer. Quando usi uno strumento, i dati richiesti vengono passati al client AI: il loro trattamento dipende dall’assistente e dalle sue impostazioni.",
+    "faq3Q": "Quali client sono supportati?",
+    "faq3A": "La configurazione guidata supporta Google Antigravity, DeepSeek Harness, Claude Desktop e Codex. Claude Desktop è disponibile su macOS e Windows. Puoi configurare manualmente anche altri client MCP compatibili con stdio.",
+    "faq4Q": "Il server può modificare o cancellare i miei dati su Garmin?",
+    "faq4A": "No. I cinque strumenti sono in sola lettura: non caricano, modificano o cancellano attività e metriche su Garmin Connect.",
+    "footerText": "garmin_mcp · Progetto indipendente, non affiliato a Garmin.",
+    "footerSource": "Sorgente ZIP",
+    "footerRepo": "GitHub",
+    "footerLibrary": "Libreria Garmin Connect ↗",
+    "modalTitle": "Istruzioni di installazione",
+    "modalStep1": "Esegui questo comando nel terminale del tuo computer:",
+    "modalStep2": "Effettua il login a Garmin Connect inserendo credenziali e codice MFA se richiesto.",
+    "modalStep3": "Riavvia Google Antigravity, DeepSeek Harness, Claude o Codex per caricare i nuovi strumenti.",
+    "close": "Chiudi",
+    "footerSpecs": "Specifiche MCP ↗",
+    "navigationLabel": "Navigazione principale",
+    "navTools": "Strumenti",
+    "navGuide": "Installazione",
+    "navFaq": "FAQ",
+    "languageLabel": "Lingua",
+    "installationLabel": "Modalità di installazione",
+    "assistantLabel": "Assistente",
+    "osLabel": "Sistema operativo",
+    "copyCommand": "Copia comando",
+    "copyExample": "Copia esempio",
+    "metricsLabel": "Dati Garmin disponibili",
+    "closeDialog": "Chiudi istruzioni",
+    "terminalLabel": "INSTALLAZIONE LOCALE",
+    "noParams": "Nessun parametro",
+    "copyFailed": "Copia non riuscita. Seleziona e copia il testo manualmente.",
+    "pageTitle": "garmin_mcp — I tuoi dati Garmin, nel tuo assistente",
+    "pageDescription": "Collega attività, sonno e recupero Garmin al tuo assistente AI con un server MCP locale in sola lettura."
   },
-  en: {
-    previewBadge: "Preview",
-    eyebrow: "Garmin MCP developer preview",
-    heroTitle: "Everything is a tool",
-    heroSubtitle1: "Garmin MCP is now in developer preview for Google Antigravity, DeepSeek Harness, Claude, and Codex — source code included.",
-    heroSubtitle2: "Every capability is a plugin that can be swapped or queried: daily summaries, sleep stages, heart rate, stress, body battery, activities, and 30-day trends.",
-    btnGithub: "View on GitHub",
-    btnDocs: "Developer docs",
-    btnTools: "MCP Tools",
-    btnDownload: "Download package",
-    tabQuickstart: "Quick start",
-    tabSource: "Source",
-    tabClaude: "Claude Desktop",
-    tabCodex: "Codex",
-    copy: "Copy",
-    copied: "Copied!",
-    termNoteMac: "Paste into Terminal. The command prepares the connection.",
-    termNoteWin: "Paste into PowerShell. The command prepares the connection.",
-    termNoteLinux: "Paste into Linux Terminal. The command prepares the connection.",
-    termNoteAntigravity: "Configures Garmin MCP in Google Antigravity IDE (~/.gemini/antigravity-ide/mcp_config.json).",
-    termNoteDeepseek: "Configures Garmin MCP for DeepSeek Harness (~/.dsh/mcp_config.json or dsh CLI).",
-    termNoteClaude: "Automatic stdio configuration for Claude Desktop on your computer.",
-    termNoteCodex: "Configure local stdio server for Codex (~/.codex/config.toml).",
-    termNoteSource: "Clone the GitHub repository, synchronize dependencies with uv, and authenticate locally.",
-    trustText: "Personal account · Read-only access · Strictly local",
-    belowTerminal: "Local read-only installation. No intermediate servers or telemetry.",
-    dataStripLabel: "YOUR GARMIN, IN CONVERSATION",
-    metricActivities: "Activities & Laps",
-    metricSleep: "Sleep Stages",
-    metricHeart: "Heart Rate",
-    metricStress: "Stress & HRV",
-    metricBattery: "Body Battery",
-    metricTrends: "Trends up to 31d",
-    toolsSectionTitle: "Available MCP Tools",
-    toolsSectionDesc: "Five native read-only tools adhering to the Model Context Protocol standard.",
-    tool1Desc: "Check presence and local validity of session tokens without any network roundtrip.",
-    tool2Desc: "Fetch daily health summaries, granular sleep phases, resting HR, stress, and body battery.",
-    tool3Desc: "List recent workouts with pagination, sport types, distance, and duration metrics.",
-    tool4Desc: "Deep-dive into a specific activity with split times, elevation, and lap-by-lap heart rate.",
-    tool5Desc: "Extract historical time series from 1 to 31 days with automatic average calculations.",
-    guideEyebrow: "Few steps on your machine",
-    guideTitle: "From raw metrics to answers.",
-    step1Num: "01",
-    step1Title: "Choose your assistant",
-    step1Desc: "Google Antigravity, DeepSeek Harness, Claude Desktop, or Codex. Select your client and operating system.",
-    step2Num: "02",
-    step2Title: "Local Garmin login",
-    step2Desc: "Authenticate via your local terminal. Access tokens remain encrypted on your device (0600).",
-    step3Num: "03",
-    step3Title: "Start chatting",
-    step3Desc: "Relaunch your AI client and ask questions about your health, activities, and recovery trends.",
-    examplePromptText: "“Use Garmin to analyze my sleep stages and stress trends over the last 7 days.”",
-    examplePromptAction: "Copy prompt ↗",
-    faqTitle: "Frequently Asked Questions",
-    faq1Q: "Can I connect directly from the web browser?",
-    faq1A: "No. The MCP server runs locally as a native stdio child process. This web page provides documentation and installation commands: execution happens solely on your personal computer.",
-    faq2Q: "Where are my credentials and biometric data stored?",
-    faq2A: "Your credentials are never sent to third-party servers. Login takes place directly between your terminal and Garmin Connect. Access tokens are stored in ~/.garmin-mcp with strict permissions (0700/0600).",
-    faq3Q: "Which AI clients are supported?",
-    faq3A: "Officially supports Google Antigravity IDE, DeepSeek Harness, Claude Desktop (macOS & Windows), and Codex or any client compatible with the Model Context Protocol stdio specification.",
-    faq4Q: "Can this server modify or delete my data on Garmin Connect?",
-    faq4A: "Never. The server is strictly read-only: it provides zero APIs or capabilities to write, upload, modify, or erase data on Garmin Connect.",
-    footerText: "Garmin MCP · Independent Open Source Project",
-    footerSource: "Source ZIP",
-    footerRepo: "GitHub Repo",
-    footerLibrary: "Garmin Connect Library ↗",
-    modalTitle: "Installation Instructions",
-    modalStep1: "Run the quickstart command inside your local terminal:",
-    modalStep2: "Log in to Garmin Connect entering your email, password, and MFA code if prompted.",
-    modalStep3: "Relaunch Google Antigravity, DeepSeek Harness, Claude, or Codex to register the new MCP server tools.",
-    close: "Close"
+  "en": {
+    "previewBadge": "Read-only tools",
+    "eyebrow": "Garmin Connect / MCP",
+    "heroTitle": "Your Garmin data. In your assistant.",
+    "heroSubtitle1": "Connect activities, sleep and recovery to Google Antigravity, DeepSeek Harness, Claude or Codex.",
+    "heroSubtitle2": "An MCP server on your computer, five read-only tools. Open source, with no changes to your Garmin account.",
+    "btnGithub": "View on GitHub",
+    "btnDocs": "Installation",
+    "btnTools": "MCP Tools",
+    "btnDownload": "Download source",
+    "tabQuickstart": "Quick start",
+    "tabSource": "From source",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "termNoteMac": "Paste into Terminal. The command prepares the connection.",
+    "termNoteWin": "Paste into PowerShell. The command prepares the connection.",
+    "termNoteLinux": "Paste into Linux Terminal. The command prepares the connection.",
+    "termNoteAntigravity": "Configures Garmin MCP in Google Antigravity IDE (~/.gemini/antigravity-ide/mcp_config.json).",
+    "termNoteDeepseek": "Configures Garmin MCP for DeepSeek Harness (~/.dsh/mcp_config.json or dsh CLI).",
+    "termNoteClaude": "Automatic stdio configuration for Claude Desktop on your computer.",
+    "termNoteCodex": "Configure local stdio server for Codex (~/.codex/config.toml).",
+    "termNoteSource": "Clone the GitHub repository, synchronize dependencies with uv, and authenticate locally.",
+    "trustText": "Personal account · Read-only",
+    "belowTerminal": "The server runs on your computer. Requested data is shared with the assistant you choose.",
+    "dataStripLabel": "AVAILABLE DATA",
+    "metricActivities": "Activities & Laps",
+    "metricSleep": "Sleep Stages",
+    "metricHeart": "Heart Rate",
+    "metricStress": "Stress & HRV",
+    "metricBattery": "Body Battery",
+    "metricTrends": "Trends up to 31 days",
+    "toolsSectionTitle": "Five tools. The data you need.",
+    "toolsSectionDesc": "From a daily summary to the details of a single activity.",
+    "tool1Desc": "Check for access tokens on your computer, without making a network request.",
+    "tool2Desc": "Read your daily summary: sleep, heart rate, stress and Body Battery.",
+    "tool3Desc": "List recent activities with sport, distance and duration.",
+    "tool4Desc": "Explore a single activity, including details, laps and splits.",
+    "tool5Desc": "Compare data and averages over a period of 1 to 31 days.",
+    "guideEyebrow": "SETUP",
+    "guideTitle": "From your Garmin to your assistant.",
+    "step1Num": "01",
+    "step1Title": "Choose your assistant",
+    "step1Desc": "Select your assistant and operating system, then copy the quick start command.",
+    "step2Num": "02",
+    "step2Title": "Local Garmin login",
+    "step2Desc": "Run the command in your terminal and sign in to Garmin Connect. Access tokens are saved on your computer.",
+    "step3Num": "03",
+    "step3Title": "Start chatting",
+    "step3Desc": "Restart your assistant and ask for a summary of your sleep, activities or recovery.",
+    "examplePromptText": "“How have my sleep and stress changed over the last 7 days?”",
+    "examplePromptAction": "Copy example",
+    "faqTitle": "Frequently Asked Questions",
+    "faq1Q": "Can I connect directly from the web browser?",
+    "faq1A": "No. This page provides commands and instructions. The MCP server is installed on your computer and started by your assistant.",
+    "faq2Q": "Where are my credentials and biometric data stored?",
+    "faq2A": "You sign in directly to Garmin Connect from your terminal. Tokens are saved in ~/.garmin-mcp on your computer. When you use a tool, the requested data is passed to your AI client: how it is handled depends on the assistant and its settings.",
+    "faq3Q": "Which AI clients are supported?",
+    "faq3A": "Guided setup supports Google Antigravity, DeepSeek Harness, Claude Desktop and Codex. Claude Desktop is available on macOS and Windows. Other MCP clients that support stdio can be configured manually.",
+    "faq4Q": "Can this server modify or delete my data on Garmin Connect?",
+    "faq4A": "No. All five tools are read-only: they do not upload, modify or delete activities or metrics on Garmin Connect.",
+    "footerText": "garmin_mcp · Independent project, not affiliated with Garmin.",
+    "footerSource": "Source ZIP",
+    "footerRepo": "GitHub",
+    "footerLibrary": "Garmin Connect Library ↗",
+    "modalTitle": "Installation Instructions",
+    "modalStep1": "Run this command in your computer’s terminal:",
+    "modalStep2": "Log in to Garmin Connect entering your email, password, and MFA code if prompted.",
+    "modalStep3": "Relaunch Google Antigravity, DeepSeek Harness, Claude, or Codex to register the new MCP server tools.",
+    "close": "Close",
+    "footerSpecs": "MCP specification ↗",
+    "navigationLabel": "Main navigation",
+    "navTools": "Tools",
+    "navGuide": "Installation",
+    "navFaq": "FAQ",
+    "languageLabel": "Language",
+    "installationLabel": "Installation mode",
+    "assistantLabel": "Assistant",
+    "osLabel": "Operating system",
+    "copyCommand": "Copy command",
+    "copyExample": "Copy example",
+    "metricsLabel": "Available Garmin data",
+    "closeDialog": "Close instructions",
+    "terminalLabel": "LOCAL INSTALLATION",
+    "noParams": "No parameters",
+    "copyFailed": "Copy failed. Please select and copy the text manually.",
+    "pageTitle": "garmin_mcp — Your Garmin data, in your assistant",
+    "pageDescription": "Connect Garmin activities, sleep and recovery to your AI assistant with a local, read-only MCP server."
   }
 };
 
 // Application State
-let currentLang = localStorage.getItem('garmin_mcp_lang') || 'it';
+function preferredLanguage() {
+  try {
+    const saved = localStorage.getItem('garmin_mcp_lang');
+    if (saved === 'it' || saved === 'en') return saved;
+  } catch { /* Storage may be unavailable in private browsing. */ }
+  return (navigator.language || 'it').toLowerCase().startsWith('it') ? 'it' : 'en';
+}
+let currentLang = preferredLanguage();
 let activeTab = 'quickstart';
 let targetClient = 'antigravity';
 let currentOs = 'mac';
@@ -205,7 +246,7 @@ async function copyToClipboard(text, successMsg) {
   textarea.select();
   const ok = document.execCommand('copy');
   textarea.remove();
-  showToast(ok ? successMsg : 'Copy failed. Please copy manually.');
+  showToast(ok ? successMsg : TRANSLATIONS[currentLang].copyFailed);
   return ok;
 }
 
@@ -217,18 +258,6 @@ function getActiveCommand() {
         return `& ([scriptblock]::Create((irm '${BASE_URL}/downloads/install.ps1'))) -Client ${targetClient}`;
       }
       return `curl -fsSL ${BASE_URL}/downloads/install.sh | bash -s -- ${targetClient}`;
-
-    case 'antigravity':
-      return `uv run garmin-mcp login && uv run garmin-mcp connect antigravity`;
-
-    case 'deepseek':
-      return `npx @deepseek-ai/dsh mcp add garmin "garmin-mcp serve" || (uv run garmin-mcp login && uv run garmin-mcp connect deepseek)`;
-
-    case 'claude':
-      return `uv run garmin-mcp login && uv run garmin-mcp connect claude`;
-
-    case 'codex':
-      return `uv run garmin-mcp login && uv run garmin-mcp connect codex`;
 
     case 'source':
       return `git clone https://github.com/enricoarmiento/Garmin_MCP.git && cd Garmin_MCP && uv sync && uv run garmin-mcp login`;
@@ -249,14 +278,6 @@ function getActiveNote() {
       if (targetClient === 'codex') return t.termNoteCodex;
       if (currentOs === 'windows') return t.termNoteWin;
       return t.termNoteMac;
-    case 'antigravity':
-      return t.termNoteAntigravity;
-    case 'deepseek':
-      return t.termNoteDeepseek;
-    case 'claude':
-      return t.termNoteClaude;
-    case 'codex':
-      return t.termNoteCodex;
     case 'source':
       return t.termNoteSource;
     default:
@@ -268,6 +289,17 @@ function getActiveNote() {
 function renderUI() {
   const t = TRANSLATIONS[currentLang];
   document.documentElement.lang = currentLang;
+  document.title = t.pageTitle;
+  document.querySelector('meta[name="description"]').content = t.pageDescription;
+  document.querySelector('meta[property="og:title"]').content = t.pageTitle;
+  document.querySelector('meta[property="og:description"]').content = t.pageDescription;
+  document.querySelectorAll('[data-i18n-aria]').forEach(elem => {
+    elem.setAttribute('aria-label', t[elem.dataset.i18nAria]);
+  });
+  document.querySelectorAll('[data-lang]').forEach(btn => {
+    btn.setAttribute('aria-pressed', String(btn.dataset.lang === currentLang));
+  });
+  el('term-panel').setAttribute('aria-labelledby', 'tab-' + activeTab);
 
   // Update all data-i18n elements
   document.querySelectorAll('[data-i18n]').forEach(elem => {
@@ -291,18 +323,21 @@ function renderUI() {
     const isSelected = tabName === activeTab;
     btn.classList.toggle('active', isSelected);
     btn.setAttribute('aria-selected', String(isSelected));
+    btn.tabIndex = isSelected ? 0 : -1;
   });
 
   // Update Client pills
   document.querySelectorAll('.client-pill').forEach(btn => {
     const clientName = btn.getAttribute('data-client');
     btn.classList.toggle('active', clientName === targetClient);
+    btn.setAttribute('aria-pressed', String(clientName === targetClient));
   });
 
   // Update OS pills
   document.querySelectorAll('.os-pill').forEach(btn => {
     const osName = btn.getAttribute('data-os');
     btn.classList.toggle('active', osName === currentOs);
+    btn.setAttribute('aria-pressed', String(osName === currentOs));
   });
 
   // Show or hide Client & OS selector
@@ -330,7 +365,7 @@ function renderUI() {
 function setLanguage(lang) {
   if (lang !== 'it' && lang !== 'en') return;
   currentLang = lang;
-  localStorage.setItem('garmin_mcp_lang', lang);
+  try { localStorage.setItem('garmin_mcp_lang', lang); } catch { /* Keep language usable without storage. */ }
   renderUI();
 }
 
@@ -367,6 +402,20 @@ function initEventListeners() {
     });
   });
 
+  // Roving keyboard focus for the shared installation panel.
+  const tabs = [...document.querySelectorAll('.tab-pill')];
+  tabs.forEach((btn, index) => btn.addEventListener('keydown', event => {
+    let next;
+    if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+    if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+    if (event.key === 'Home') next = 0;
+    if (event.key === 'End') next = tabs.length - 1;
+    if (next === undefined) return;
+    event.preventDefault();
+    setTab(tabs[next].dataset.tab);
+    tabs[next].focus();
+  }));
+
   // Client selector pills
   document.querySelectorAll('.client-pill').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -384,13 +433,13 @@ function initEventListeners() {
   // Copy Terminal Command
   const copyBtn = el('btn-copy');
   if (copyBtn) {
-    copyBtn.addEventListener('click', () => {
+    copyBtn.addEventListener('click', async () => {
       const t = TRANSLATIONS[currentLang];
-      copyToClipboard(getActiveCommand(), t.copied);
+      const copied = await copyToClipboard(getActiveCommand(), t.copied);
       const copyText = el('copy-text');
-      if (copyText) {
+      if (copyText && copied) {
         copyText.textContent = t.copied;
-        setTimeout(() => { copyText.textContent = t.copy; }, 1800);
+        setTimeout(() => { copyText.textContent = TRANSLATIONS[currentLang].copy; }, 1800);
       }
     });
   }
@@ -425,7 +474,8 @@ function initEventListeners() {
 
     setupDialog.addEventListener('click', e => {
       if (e.target === setupDialog) {
-        closeModal();
+        const bounds = setupDialog.getBoundingClientRect();
+        if (e.clientX < bounds.left || e.clientX > bounds.right || e.clientY < bounds.top || e.clientY > bounds.bottom) closeModal();
       }
     });
 

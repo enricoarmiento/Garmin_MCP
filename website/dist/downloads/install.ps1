@@ -1,7 +1,7 @@
 # Garmin MCP installer for Windows PowerShell. No administrator privileges required.
 param([Parameter(Mandatory=$true)][ValidateSet('claude','codex','antigravity','deepseek')][string]$Client)
 $ErrorActionPreference = 'Stop'
-$BaseUrl = 'https://garmin-mcp-connect.enricoarmiento.chatgpt.site'
+$BaseUrl = 'https://raw.githubusercontent.com/enricoarmiento/Garmin_MCP/main/website/dist'
 $Wheel = 'garmin_readonly_mcp-0.1.0-py3-none-any.whl'
 $ExpectedHash = '918f3164dedbca9504c12492b793dc21150821b016b38d7ab615e7c307680dfe'
 Write-Host "Garmin MCP — installazione locale per $Client"

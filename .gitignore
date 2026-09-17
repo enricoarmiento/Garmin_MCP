@@ -10,3 +10,5 @@ garmin_tokens.json
 exports/
 /dist/
 .DS_Store
+
+.vercel/
