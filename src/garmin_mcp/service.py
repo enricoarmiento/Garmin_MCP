@@ -13,6 +13,7 @@ from garminconnect import (
     Garmin,
     GarminConnectAuthenticationError,
     GarminConnectConnectionError,
+    GarminConnectNotFoundError,
     GarminConnectTooManyRequestsError,
 )
 
@@ -42,6 +43,7 @@ METRICS = {
     "body_battery": "get_body_battery",
     "hrv": "get_hrv_data",
 }
+NO_DATA = "Nessun dato Garmin per questa richiesta: dispositivo non sincronizzato o metrica non supportata dall'orologio."
 ALLOWED = set(METRICS.values()) | {"get_activities", "get_activity", "get_activity_splits"}
 
 
@@ -75,7 +77,12 @@ class GarminService:
                 self._client = None
                 self._cache.clear()
                 raise GarminError("Sessione assente o scaduta. Esegui garmin-mcp login nel terminale.") from None
-            except GarminConnectConnectionError:
+            except GarminConnectNotFoundError:
+                raise GarminError(NO_DATA) from None
+            except GarminConnectConnectionError as exc:
+                # The library reports an empty response as "No ... data received".
+                if str(exc).startswith("No "):
+                    raise GarminError(NO_DATA) from None
                 raise GarminError("Garmin non raggiungibile. Riprova più tardi.") from None
             except Exception:
                 # Upstream errors can contain account data, URLs or tokens.

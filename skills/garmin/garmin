@@ -1,0 +1,25 @@
+#!/bin/sh
+# Garmin skill launcher. Works from an installed skill folder (bundled app)
+# or from the development repository (skills/garmin inside the project).
+DIR="$(cd "$(dirname "$0")" && pwd -P)"
+if [ -f "$DIR/pyproject.toml" ]; then ROOT="$DIR"; else ROOT="$(cd "$DIR/../.." && pwd -P)"; fi
+
+UV="$(command -v uv || true)"
+for candidate in "$HOME/.local/bin/uv" "$HOME/.cargo/bin/uv" /opt/homebrew/bin/uv /usr/local/bin/uv; do
+  [ -z "$UV" ] && [ -x "$candidate" ] && UV="$candidate"
+done
+if [ -z "$UV" ]; then
+  echo "SETUP_REQUIRED: uv non è installato. Installalo una volta con:" >&2
+  echo "  curl -LsSf https://astral.sh/uv/install.sh | sh" >&2
+  echo "(oppure: brew install uv). Poi riprova." >&2
+  exit 2
+fi
+
+if [ "$1" = "login" ] && ! [ -t 0 ]; then
+  echo "LOGIN_REQUIRES_TERMINAL: il login va eseguito dall'utente in un terminale:" >&2
+  echo "  \"$DIR/garmin\" login" >&2
+  exit 3
+fi
+
+# First run installs Python and dependencies into $ROOT/.venv (needs internet, ~30 s).
+exec "$UV" run --project "$ROOT" --locked --quiet --no-dev garmin-mcp "$@"

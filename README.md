@@ -43,6 +43,32 @@ Oppure importa o adatta [examples/mcp.json](examples/mcp.json) nelle impostazion
 
 Riavvia o riconnetti il client. `garmin_status` controlla solo la presenza locale dei token; una lettura conferma che la sessione funziona. Per avviare manualmente: `uv run garmin-mcp serve`. Il processo attende messaggi MCP su stdin: non è una pagina web né una CLI interattiva.
 
+## Skill per agenti (senza MCP)
+
+Gli stessi strumenti sono disponibili come comandi che stampano JSON:
+
+```sh
+uv run garmin-mcp status
+uv run garmin-mcp daily 2026-09-15 sleep
+uv run garmin-mcp activities --limit 10
+uv run garmin-mcp activity 123456789 --splits
+uv run garmin-mcp trends 2026-09-01 2026-09-15
+```
+
+La cartella [skills/garmin](skills/garmin) è una skill per Claude Code. Installala con un link:
+
+```sh
+ln -sfn "$PWD/skills/garmin" ~/.claude/skills/garmin
+```
+
+Pacchetto da distribuire (skill autonoma: launcher, sorgenti, lockfile; Python e dipendenze installati da `uv` al primo uso):
+
+```sh
+./scripts/build_skill.sh   # crea dist/garmin-skill.zip
+```
+
+L'acquirente estrae lo zip in `~/.claude/skills/` e segue `garmin/README.md`.
+
 ## Strumenti
 
 | Strumento | Parametri | Risultato |

@@ -1,4 +1,6 @@
 from unittest.mock import Mock
+import garminconnect
+
 
 import pytest
 from garminconnect import GarminConnectAuthenticationError, GarminConnectTooManyRequestsError
@@ -104,3 +106,15 @@ def test_activity_pagination_and_splits(monkeypatch, setup_service):
             server.garmin_activities(start, limit)
     with pytest.raises(ValueError):
         server.garmin_activity("../secret")
+
+
+@pytest.mark.parametrize("exc,message", [
+    (garminconnect.GarminConnectConnectionError("No heart rate data received"), "Nessun dato"),
+    (garminconnect.GarminConnectNotFoundError("404"), "Nessun dato"),
+    (garminconnect.GarminConnectConnectionError("timeout"), "non raggiungibile"),
+])
+def test_missing_data_is_not_reported_as_outage(setup_service, exc, message):
+    service, client, _ = setup_service
+    client.get_heart_rates.side_effect = exc
+    with pytest.raises(GarminError, match=message):
+        service.daily("2025-01-01", "heart_rate")
