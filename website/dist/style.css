@@ -1007,10 +1007,13 @@ html { scroll-padding-top: 112px; }
 .ribbon-tags { width: 100%; justify-content: space-between; gap: 12px 24px; }
 .ribbon-item { color: #c5ccd1; font-size: 14px; }
 .section-heading h2 { font-size: 32px; letter-spacing: -1px; }
-.tools-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--border-subtle); }
+.tools-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--border-subtle); }
 .tool-card { background: none; border: 0; border-right: 1px solid var(--border-subtle); border-radius: 0; padding: 24px 18px; backdrop-filter: none; }
-.tool-card:first-child { padding-left: 0; }
-.tool-card:last-child { border-right: 0; padding-right: 0; }
+.tool-card { border-bottom: 1px solid var(--border-subtle); }
+.tool-card:nth-child(3n+1) { padding-left: 0; }
+.tool-card:nth-child(3n) { border-right: 0; padding-right: 0; }
+.hero-price { color: #c5ccd1; font-size: 14px; margin-top: 18px; } .terminal-label { color: #899198; font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 1.2px; margin-right: auto; }
+.terminal-header .terminal-actions { width: 100%; justify-content: space-between; }
 .tool-card:hover { background: none; transform: none; border-color: var(--border-subtle); }
 .tool-name { font-size: 14px; overflow-wrap: anywhere; }
 .tool-badge { color: #899198; font-size: 12px; }

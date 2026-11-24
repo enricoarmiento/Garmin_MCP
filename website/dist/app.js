@@ -1,191 +1,199 @@
 'use strict';
 
-// Use the deployed site; local previews use the public source downloads.
-const BASE_URL = window.location.protocol === 'https:'
-  ? window.location.origin
-  : 'https://raw.githubusercontent.com/enricoarmiento/Garmin_MCP/main/website/dist';
+const AGENSI_COMMAND = 'claude mcp add --transport http agensi https://mcp.agensi.io/mcp/auth';
 
 // Bilingual translations dictionary (Italian & English)
 const TRANSLATIONS = {
   "it": {
-    "previewBadge": "Strumenti in sola lettura",
-    "eyebrow": "Garmin Connect / MCP",
-    "heroTitle": "I tuoi dati Garmin. Nel tuo assistente.",
-    "heroSubtitle1": "Collega attività, sonno e recupero a Google Antigravity, DeepSeek Harness, Claude o Codex.",
-    "heroSubtitle2": "Un server MCP sul tuo computer, cinque strumenti in sola lettura. Codice aperto, nessuna modifica al tuo account Garmin.",
-    "btnGithub": "Vedi su GitHub",
-    "btnDocs": "Installazione",
-    "btnTools": "Strumenti MCP",
-    "btnDownload": "Scarica sorgenti",
-    "tabQuickstart": "Avvio rapido",
-    "tabSource": "Da sorgenti",
+    "eyebrow": "Skill per Claude Code · Garmin Connect",
+    "heroTitle": "I tuoi dati Garmin. Analizzati da Claude.",
+    "heroSubtitle1": "Chiedi come hai dormito, se oggi puoi allenarti forte o come stanno andando le tue corse. Claude legge i tuoi dati Garmin e ti risponde con numeri e consigli chiari.",
+    "heroSubtitle2": "Tutto in uno: nessun server MCP da installare a parte, nessuna chiave API. Sola lettura: il tuo account Garmin non viene mai modificato.",
+    "btnBuy": "Acquista su Agensi",
+    "btnDocs": "Come funziona",
+    "btnTools": "Cosa puoi chiedere",
+    "btnFaq": "Domande frequenti",
+    "heroPrice": "3 $ una tantum · Rimborso garantito da Agensi se la skill non fa ciò che promette",
+    "terminalLabel": "COLLEGA AGENSI A CLAUDE CODE",
     "copy": "Copia",
     "copied": "Copiato!",
-    "termNoteMac": "Incolla nel Terminale. Il comando prepara il collegamento.",
-    "termNoteWin": "Incolla in PowerShell. Il comando prepara il collegamento.",
-    "termNoteLinux": "Incolla nel Terminale Linux. Il comando prepara il collegamento.",
-    "termNoteAntigravity": "Configura Garmin MCP in Google Antigravity IDE (~/.gemini/antigravity-ide/mcp_config.json).",
-    "termNoteDeepseek": "Configura Garmin MCP per DeepSeek Harness (~/.dsh/mcp_config.json o dsh CLI).",
-    "termNoteClaude": "Configurazione automatica del server locale stdio per Claude Desktop.",
-    "termNoteCodex": "Configurazione del server stdio per Codex (~/.codex/config.toml).",
-    "termNoteSource": "Clona il repository GitHub, sincronizza le dipendenze con uv ed effettua il login locale.",
+    "termNote": "Poi in Claude Code scrivi /mcp per accedere ad Agensi e chiedi: «Carica la skill Garmin Connect Reader & Coach e configura Garmin».",
     "trustText": "Account personale · Sola lettura",
-    "belowTerminal": "Il server gira sul tuo computer. I dati richiesti vengono condivisi con l’assistente che scegli.",
-    "dataStripLabel": "DATI DISPONIBILI",
-    "metricActivities": "Attività e giri",
-    "metricSleep": "Fasi del sonno",
-    "metricHeart": "Battito cardiaco",
-    "metricStress": "Stress e HRV",
-    "metricBattery": "Body Battery",
-    "metricTrends": "Trend fino a 31 giorni",
-    "toolsSectionTitle": "Cinque strumenti. I dati che servono.",
-    "toolsSectionDesc": "Dal riepilogo della giornata ai dettagli di una singola attività.",
-    "tool1Desc": "Controlla la presenza dei token di accesso sul computer, senza chiamate di rete.",
-    "tool2Desc": "Consulta il riepilogo giornaliero: sonno, frequenza cardiaca, stress e Body Battery.",
-    "tool3Desc": "Elenca le attività recenti con sport, distanza e durata.",
-    "tool4Desc": "Esplora una singola attività, con dettagli, giri e tempi parziali.",
-    "tool5Desc": "Confronta dati e medie su un intervallo da 1 a 31 giorni.",
-    "guideEyebrow": "CONFIGURAZIONE",
-    "guideTitle": "Dal tuo Garmin al tuo assistente.",
-    "step1Num": "01",
-    "step1Title": "Scegli il tuo assistente",
-    "step1Desc": "Seleziona assistente e sistema operativo, poi copia il comando di avvio rapido.",
-    "step2Num": "02",
-    "step2Title": "Accedi a Garmin in locale",
-    "step2Desc": "Esegui il comando nel terminale e accedi a Garmin Connect. I token di accesso vengono salvati sul tuo computer.",
-    "step3Num": "03",
-    "step3Title": "Inizia a conversare",
-    "step3Desc": "Riavvia l’assistente e chiedi un riepilogo del sonno, delle attività o del recupero.",
-    "examplePromptText": "“Come sono cambiati sonno e stress negli ultimi 7 giorni?”",
+    "belowTerminal": "La skill gira sul tuo computer. La password Garmin la scrivi solo tu nel terminale: Claude non la vede mai.",
+    "dataStripLabel": "DATI LETTI",
+    "metricSleep": "Sonno e fasi",
+    "metricReadiness": "HRV e Training Readiness",
+    "metricVo2": "VO2max e stato di allenamento",
+    "metricActivities": "Attività, giri e zone cardio",
+    "metricBattery": "Body Battery e stress",
+    "metricRecords": "Record e previsioni gara",
+    "previewBadge": "Analisi pronte all'uso",
+    "toolsSectionTitle": "Fai domande. Ricevi risposte con i tuoi numeri.",
+    "toolsSectionDesc": "Sei analisi guidate incluse nella skill. Claude indica sempre il periodo, i dati usati e i giorni mancanti.",
+    "tool1Name": "Report settimanale o mensile",
+    "tool1Desc": "Passi, distanza, frequenza a riposo e stress confrontati con il periodo precedente.",
+    "tool1Ask": "«Com'è andata la mia settimana?»",
+    "tool2Name": "Recupero del giorno",
+    "tool2Desc": "Verdetto chiaro (allenati, vai piano, riposa) basato su Training Readiness, HRV, sonno e frequenza a riposo.",
+    "tool2Ask": "«Posso fare ripetute oggi?»",
+    "tool3Name": "Analisi del sonno",
+    "tool3Desc": "Durata, punteggio, fasi profondo/REM/leggero, regolarità; notte migliore e peggiore.",
+    "tool3Ask": "«Come ho dormito questa settimana?»",
+    "tool4Name": "Confronto corse e uscite",
+    "tool4Desc": "Tabella con passo, battito, dislivello ed efficienza; per una sessione: giri, zone cardio e meteo.",
+    "tool4Ask": "«Confronta le mie ultime 10 corse»",
+    "tool5Name": "Progressi di forma",
+    "tool5Desc": "VO2max nel tempo, stato di allenamento, record personali e previsioni dei tempi di gara.",
+    "tool5Ask": "«Il mio VO2max sta migliorando?»",
+    "tool6Name": "Stress ed energia",
+    "tool6Desc": "Stress medio e picchi con Body Battery, messi in relazione a sonno e allenamenti.",
+    "tool6Ask": "«Perché sono così stanco ultimamente?»",
+    "guideEyebrow": "COME FUNZIONA",
+    "guideTitle": "Tre passaggi, una volta sola.",
+    "step1Title": "Acquista e collega",
+    "step1Desc": "Acquista la skill su Agensi, collega Agensi a Claude Code con il comando qui sopra e chiedi a Claude di caricarla.",
+    "step2Title": "Accedi a Garmin dal tuo terminale",
+    "step2Desc": "Claude prepara tutto e ti dà un comando: lo esegui tu, inserisci email, password ed eventuale codice MFA. Python si installa da solo.",
+    "step3Title": "Chiedi quello che vuoi",
+    "step3Desc": "Da quel momento basta parlare con Claude: sonno, recupero, allenamenti e trend, nella tua lingua.",
+    "examplePromptText": "“Posso fare ripetute oggi? E confronta il mio sonno con la settimana scorsa.”",
     "examplePromptAction": "Copia esempio",
     "faqTitle": "Domande frequenti",
-    "faq1Q": "Posso collegarlo direttamente dal browser?",
-    "faq1A": "No. Questa pagina fornisce i comandi e la guida. Il server MCP viene installato e avviato sul tuo computer dal tuo assistente.",
-    "faq2Q": "Dove vengono salvate le credenziali e i miei dati sanitari?",
-    "faq2A": "Accedi direttamente a Garmin Connect dal terminale. I token vengono salvati nella cartella ~/.garmin-mcp sul tuo computer. Quando usi uno strumento, i dati richiesti vengono passati al client AI: il loro trattamento dipende dall’assistente e dalle sue impostazioni.",
-    "faq3Q": "Quali client sono supportati?",
-    "faq3A": "La configurazione guidata supporta Google Antigravity, DeepSeek Harness, Claude Desktop e Codex. Claude Desktop è disponibile su macOS e Windows. Puoi configurare manualmente anche altri client MCP compatibili con stdio.",
-    "faq4Q": "Il server può modificare o cancellare i miei dati su Garmin?",
-    "faq4A": "No. I cinque strumenti sono in sola lettura: non caricano, modificano o cancellano attività e metriche su Garmin Connect.",
-    "footerText": "garmin_mcp · Progetto indipendente, non affiliato a Garmin.",
-    "footerSource": "Sorgente ZIP",
-    "footerRepo": "GitHub",
+    "faq1Q": "Cosa mi serve?",
+    "faq1A": "Un account Garmin Connect con l'orologio sincronizzato, Claude Code su macOS o Linux e una connessione internet. Serve anche uv, il gestore Python: se manca, Claude ti chiede il permesso e lo installa. Python e le librerie si installano da soli.",
+    "faq2Q": "Funziona nella chat di claude.ai o su Windows?",
+    "faq2A": "La skill ha bisogno di un terminale sul tuo computer, quindi è pensata per Claude Code (app desktop o terminale), non per la chat web. Windows non è ancora stato testato.",
+    "faq3Q": "La mia password è al sicuro?",
+    "faq3A": "La password la scrivi solo tu, nel tuo terminale, e non viene salvata. Claude non la vede mai. Sul computer restano solo i token di sessione Garmin, nella cartella privata ~/.garmin-mcp: per scollegarti basta eliminarla.",
+    "faq4Q": "Può modificare o cancellare i miei dati su Garmin?",
+    "faq4A": "No. La skill è in sola lettura: non carica, modifica o cancella attività e metriche. Le posizioni GPS non vengono mostrate se non le chiedi.",
+    "faq5Q": "Dove finiscono i miei dati sanitari?",
+    "faq5A": "I dati vanno da Garmin al tuo computer e arrivano a Claude solo quando fai una domanda. Il loro trattamento dipende dalle impostazioni del tuo account Claude. La skill non invia dati altrove.",
+    "faq6Q": "Cosa succede se un dato manca o Garmin non risponde?",
+    "faq6A": "Claude lo dice chiaramente: un dato mancante non viene mai trattato come zero. Alcune metriche (Training Readiness, HRV, VO2max) dipendono dal modello di orologio. Se Garmin limita le richieste, Claude si ferma e ti dice quanto aspettare.",
+    "faq7Q": "È un prodotto ufficiale Garmin? Dà consigli medici?",
+    "faq7A": "No a entrambe. È un progetto indipendente basato sulla libreria non ufficiale python-garminconnect: un cambiamento lato Garmin può bloccare temporaneamente l'accesso fino a un aggiornamento. Le analisi sono descrittive e non sostituiscono un medico.",
+    "footerText": "Garmin Connect Reader & Coach · Progetto indipendente, non affiliato a Garmin.",
+    "footerAgensi": "Pagina su Agensi ↗",
     "footerLibrary": "Libreria Garmin Connect ↗",
-    "modalTitle": "Istruzioni di installazione",
-    "modalStep1": "Esegui questo comando nel terminale del tuo computer:",
-    "modalStep2": "Effettua il login a Garmin Connect inserendo credenziali e codice MFA se richiesto.",
-    "modalStep3": "Riavvia Google Antigravity, DeepSeek Harness, Claude o Codex per caricare i nuovi strumenti.",
+    "footerClaude": "Claude Code ↗",
+    "modalKicker": "Installazione",
+    "modalTitle": "Istruzioni complete",
+    "modalStep1": "Acquista la skill su Agensi (link in alto).",
+    "modalStep2": "Nel terminale, collega Agensi a Claude Code:",
+    "modalStep3": "Apri Claude Code, scrivi /mcp, scegli agensi e accedi con il tuo account.",
+    "modalStep4": "Chiedi: «Carica la skill Garmin Connect Reader & Coach e configura Garmin». Claude prepara tutto e ti dà il comando di login: eseguilo in un terminale separato.",
     "close": "Chiudi",
-    "footerSpecs": "Specifiche MCP ↗",
     "navigationLabel": "Navigazione principale",
-    "navTools": "Strumenti",
-    "navGuide": "Installazione",
+    "navTools": "Cosa chiedere",
+    "navGuide": "Come funziona",
     "navFaq": "FAQ",
     "languageLabel": "Lingua",
-    "installationLabel": "Modalità di installazione",
-    "assistantLabel": "Assistente",
-    "osLabel": "Sistema operativo",
+    "installationLabel": "Installazione",
     "copyCommand": "Copia comando",
     "copyExample": "Copia esempio",
     "metricsLabel": "Dati Garmin disponibili",
     "closeDialog": "Chiudi istruzioni",
-    "terminalLabel": "INSTALLAZIONE LOCALE",
-    "noParams": "Nessun parametro",
     "copyFailed": "Copia non riuscita. Seleziona e copia il testo manualmente.",
-    "pageTitle": "garmin_mcp — I tuoi dati Garmin, nel tuo assistente",
-    "pageDescription": "Collega attività, sonno e recupero Garmin al tuo assistente AI con un server MCP locale in sola lettura."
+    "pageTitle": "Garmin Connect Reader & Coach — I tuoi dati Garmin, analizzati da Claude",
+    "pageDescription": "Skill per Claude Code: legge in sola lettura sonno, HRV, Training Readiness, VO2max e attività dal tuo account Garmin Connect e li trasforma in report e consigli."
   },
   "en": {
-    "previewBadge": "Read-only tools",
-    "eyebrow": "Garmin Connect / MCP",
-    "heroTitle": "Your Garmin data. In your assistant.",
-    "heroSubtitle1": "Connect activities, sleep and recovery to Google Antigravity, DeepSeek Harness, Claude or Codex.",
-    "heroSubtitle2": "An MCP server on your computer, five read-only tools. Open source, with no changes to your Garmin account.",
-    "btnGithub": "View on GitHub",
-    "btnDocs": "Installation",
-    "btnTools": "MCP Tools",
-    "btnDownload": "Download source",
-    "tabQuickstart": "Quick start",
-    "tabSource": "From source",
+    "eyebrow": "Claude Code skill · Garmin Connect",
+    "heroTitle": "Your Garmin data. Analysed by Claude.",
+    "heroSubtitle1": "Ask how you slept, whether you can train hard today or how your runs are going. Claude reads your Garmin data and answers with clear numbers and advice.",
+    "heroSubtitle2": "All-in-one: no separate MCP server to install, no API key. Read-only: your Garmin account is never modified.",
+    "btnBuy": "Buy on Agensi",
+    "btnDocs": "How it works",
+    "btnTools": "What you can ask",
+    "btnFaq": "FAQ",
+    "heroPrice": "$3 one-time · Agensi refunds you if the skill doesn't do what it promises",
+    "terminalLabel": "CONNECT AGENSI TO CLAUDE CODE",
     "copy": "Copy",
     "copied": "Copied!",
-    "termNoteMac": "Paste into Terminal. The command prepares the connection.",
-    "termNoteWin": "Paste into PowerShell. The command prepares the connection.",
-    "termNoteLinux": "Paste into Linux Terminal. The command prepares the connection.",
-    "termNoteAntigravity": "Configures Garmin MCP in Google Antigravity IDE (~/.gemini/antigravity-ide/mcp_config.json).",
-    "termNoteDeepseek": "Configures Garmin MCP for DeepSeek Harness (~/.dsh/mcp_config.json or dsh CLI).",
-    "termNoteClaude": "Automatic stdio configuration for Claude Desktop on your computer.",
-    "termNoteCodex": "Configure local stdio server for Codex (~/.codex/config.toml).",
-    "termNoteSource": "Clone the GitHub repository, synchronize dependencies with uv, and authenticate locally.",
+    "termNote": "Then in Claude Code type /mcp to sign in to Agensi and ask: “Load the Garmin Connect Reader & Coach skill and set up Garmin”.",
     "trustText": "Personal account · Read-only",
-    "belowTerminal": "The server runs on your computer. Requested data is shared with the assistant you choose.",
-    "dataStripLabel": "AVAILABLE DATA",
-    "metricActivities": "Activities & Laps",
-    "metricSleep": "Sleep Stages",
-    "metricHeart": "Heart Rate",
-    "metricStress": "Stress & HRV",
-    "metricBattery": "Body Battery",
-    "metricTrends": "Trends up to 31 days",
-    "toolsSectionTitle": "Five tools. The data you need.",
-    "toolsSectionDesc": "From a daily summary to the details of a single activity.",
-    "tool1Desc": "Check for access tokens on your computer, without making a network request.",
-    "tool2Desc": "Read your daily summary: sleep, heart rate, stress and Body Battery.",
-    "tool3Desc": "List recent activities with sport, distance and duration.",
-    "tool4Desc": "Explore a single activity, including details, laps and splits.",
-    "tool5Desc": "Compare data and averages over a period of 1 to 31 days.",
-    "guideEyebrow": "SETUP",
-    "guideTitle": "From your Garmin to your assistant.",
-    "step1Num": "01",
-    "step1Title": "Choose your assistant",
-    "step1Desc": "Select your assistant and operating system, then copy the quick start command.",
-    "step2Num": "02",
-    "step2Title": "Local Garmin login",
-    "step2Desc": "Run the command in your terminal and sign in to Garmin Connect. Access tokens are saved on your computer.",
-    "step3Num": "03",
-    "step3Title": "Start chatting",
-    "step3Desc": "Restart your assistant and ask for a summary of your sleep, activities or recovery.",
-    "examplePromptText": "“How have my sleep and stress changed over the last 7 days?”",
+    "belowTerminal": "The skill runs on your computer. You type your Garmin password only in your own terminal: Claude never sees it.",
+    "dataStripLabel": "DATA IT READS",
+    "metricSleep": "Sleep & stages",
+    "metricReadiness": "HRV & Training Readiness",
+    "metricVo2": "VO2max & training status",
+    "metricActivities": "Activities, laps & HR zones",
+    "metricBattery": "Body Battery & stress",
+    "metricRecords": "Records & race predictions",
+    "previewBadge": "Ready-made analyses",
+    "toolsSectionTitle": "Ask questions. Get answers with your numbers.",
+    "toolsSectionDesc": "Six guided analyses included in the skill. Claude always states the period, the data used and any missing days.",
+    "tool1Name": "Weekly or monthly report",
+    "tool1Desc": "Steps, distance, resting heart rate and stress compared with the previous period.",
+    "tool1Ask": "“How was my week?”",
+    "tool2Name": "Daily recovery",
+    "tool2Desc": "A clear verdict (train, go easy, rest) based on Training Readiness, HRV, sleep and resting heart rate.",
+    "tool2Ask": "“Can I do intervals today?”",
+    "tool3Name": "Sleep review",
+    "tool3Desc": "Duration, score, deep/REM/light stages, consistency; best and worst night.",
+    "tool3Ask": "“How did I sleep this week?”",
+    "tool4Name": "Run & ride comparison",
+    "tool4Desc": "Table with pace, heart rate, elevation and efficiency; for one session: laps, HR zones and weather.",
+    "tool4Ask": "“Compare my last 10 runs”",
+    "tool5Name": "Fitness progress",
+    "tool5Desc": "VO2max over time, training status, personal records and race time predictions.",
+    "tool5Ask": "“Is my VO2max improving?”",
+    "tool6Name": "Stress & energy",
+    "tool6Desc": "Average and peak stress with Body Battery, related to sleep and workouts.",
+    "tool6Ask": "“Why am I so tired lately?”",
+    "guideEyebrow": "HOW IT WORKS",
+    "guideTitle": "Three steps, only once.",
+    "step1Title": "Buy and connect",
+    "step1Desc": "Buy the skill on Agensi, connect Agensi to Claude Code with the command above and ask Claude to load it.",
+    "step2Title": "Sign in to Garmin from your terminal",
+    "step2Desc": "Claude prepares everything and gives you one command: you run it and enter your email, password and MFA code if asked. Python installs itself.",
+    "step3Title": "Ask anything",
+    "step3Desc": "From then on, just talk to Claude: sleep, recovery, training and trends, in your language.",
+    "examplePromptText": "“Can I do intervals today? And compare my sleep with last week.”",
     "examplePromptAction": "Copy example",
     "faqTitle": "Frequently Asked Questions",
-    "faq1Q": "Can I connect directly from the web browser?",
-    "faq1A": "No. This page provides commands and instructions. The MCP server is installed on your computer and started by your assistant.",
-    "faq2Q": "Where are my credentials and biometric data stored?",
-    "faq2A": "You sign in directly to Garmin Connect from your terminal. Tokens are saved in ~/.garmin-mcp on your computer. When you use a tool, the requested data is passed to your AI client: how it is handled depends on the assistant and its settings.",
-    "faq3Q": "Which AI clients are supported?",
-    "faq3A": "Guided setup supports Google Antigravity, DeepSeek Harness, Claude Desktop and Codex. Claude Desktop is available on macOS and Windows. Other MCP clients that support stdio can be configured manually.",
-    "faq4Q": "Can this server modify or delete my data on Garmin Connect?",
-    "faq4A": "No. All five tools are read-only: they do not upload, modify or delete activities or metrics on Garmin Connect.",
-    "footerText": "garmin_mcp · Independent project, not affiliated with Garmin.",
-    "footerSource": "Source ZIP",
-    "footerRepo": "GitHub",
-    "footerLibrary": "Garmin Connect Library ↗",
-    "modalTitle": "Installation Instructions",
-    "modalStep1": "Run this command in your computer’s terminal:",
-    "modalStep2": "Log in to Garmin Connect entering your email, password, and MFA code if prompted.",
-    "modalStep3": "Relaunch Google Antigravity, DeepSeek Harness, Claude, or Codex to register the new MCP server tools.",
+    "faq1Q": "What do I need?",
+    "faq1A": "A Garmin Connect account with a synced watch, Claude Code on macOS or Linux and an internet connection. You also need uv, the Python manager: if it's missing, Claude asks permission and installs it. Python and libraries install themselves.",
+    "faq2Q": "Does it work in claude.ai chat or on Windows?",
+    "faq2A": "The skill needs a terminal on your computer, so it is built for Claude Code (desktop app or terminal), not web chat. Windows has not been tested yet.",
+    "faq3Q": "Is my password safe?",
+    "faq3A": "You type your password only in your own terminal and it is not stored. Claude never sees it. Only Garmin session tokens stay on your computer, in the private ~/.garmin-mcp folder: delete it to sign out.",
+    "faq4Q": "Can it modify or delete my data on Garmin?",
+    "faq4A": "No. The skill is read-only: it never uploads, edits or deletes activities or metrics. GPS locations are not shown unless you ask.",
+    "faq5Q": "Where does my health data go?",
+    "faq5A": "Data travels from Garmin to your computer and reaches Claude only when you ask a question. How it is handled depends on your Claude account settings. The skill sends data nowhere else.",
+    "faq6Q": "What if data is missing or Garmin doesn't respond?",
+    "faq6A": "Claude says so clearly: missing data is never treated as zero. Some metrics (Training Readiness, HRV, VO2max) depend on your watch model. If Garmin rate-limits requests, Claude stops and tells you how long to wait.",
+    "faq7Q": "Is it an official Garmin product? Does it give medical advice?",
+    "faq7A": "No to both. It is an independent project built on the unofficial python-garminconnect library: a change on Garmin's side can temporarily block access until an update. Analyses are descriptive and do not replace a doctor.",
+    "footerText": "Garmin Connect Reader & Coach · Independent project, not affiliated with Garmin.",
+    "footerAgensi": "Agensi page ↗",
+    "footerLibrary": "Garmin Connect library ↗",
+    "footerClaude": "Claude Code ↗",
+    "modalKicker": "Installation",
+    "modalTitle": "Full instructions",
+    "modalStep1": "Buy the skill on Agensi (link above).",
+    "modalStep2": "In your terminal, connect Agensi to Claude Code:",
+    "modalStep3": "Open Claude Code, type /mcp, choose agensi and sign in with your account.",
+    "modalStep4": "Ask: “Load the Garmin Connect Reader & Coach skill and set up Garmin”. Claude prepares everything and gives you the login command: run it in a separate terminal.",
     "close": "Close",
-    "footerSpecs": "MCP specification ↗",
     "navigationLabel": "Main navigation",
-    "navTools": "Tools",
-    "navGuide": "Installation",
+    "navTools": "What to ask",
+    "navGuide": "How it works",
     "navFaq": "FAQ",
     "languageLabel": "Language",
-    "installationLabel": "Installation mode",
-    "assistantLabel": "Assistant",
-    "osLabel": "Operating system",
+    "installationLabel": "Installation",
     "copyCommand": "Copy command",
     "copyExample": "Copy example",
     "metricsLabel": "Available Garmin data",
     "closeDialog": "Close instructions",
-    "terminalLabel": "LOCAL INSTALLATION",
-    "noParams": "No parameters",
     "copyFailed": "Copy failed. Please select and copy the text manually.",
-    "pageTitle": "garmin_mcp — Your Garmin data, in your assistant",
-    "pageDescription": "Connect Garmin activities, sleep and recovery to your AI assistant with a local, read-only MCP server."
+    "pageTitle": "Garmin Connect Reader & Coach — Your Garmin data, analysed by Claude",
+    "pageDescription": "Claude Code skill: reads sleep, HRV, Training Readiness, VO2max and activities from your Garmin Connect account, read-only, and turns them into reports and advice."
   }
 };
 
-// Application State
 function preferredLanguage() {
   try {
     const saved = localStorage.getItem('garmin_mcp_lang');
@@ -194,37 +202,19 @@ function preferredLanguage() {
   return (navigator.language || 'it').toLowerCase().startsWith('it') ? 'it' : 'en';
 }
 let currentLang = preferredLanguage();
-let activeTab = 'quickstart';
-let targetClient = 'antigravity';
-let currentOs = 'mac';
 
-// Detect initial OS
-const ua = navigator.userAgent;
-if (/Windows/i.test(ua)) {
-  currentOs = 'windows';
-} else if (/Linux/i.test(ua) && !/Android/i.test(ua)) {
-  currentOs = 'linux';
-} else {
-  currentOs = 'mac';
-}
-
-// Elements helper
 const el = id => document.getElementById(id);
 let toastTimeout;
 
-// Toast notification helper
 function showToast(message) {
   const toast = el('toast');
   if (!toast) return;
   toast.textContent = message;
   toast.classList.add('visible');
   clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(() => {
-    toast.classList.remove('visible');
-  }, 3200);
+  toastTimeout = setTimeout(() => toast.classList.remove('visible'), 3200);
 }
 
-// Safe Clipboard Copy Helper
 async function copyToClipboard(text, successMsg) {
   try {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -235,7 +225,6 @@ async function copyToClipboard(text, successMsg) {
   } catch (err) {
     console.warn('Clipboard API fallback', err);
   }
-
   const textarea = document.createElement('textarea');
   textarea.value = text;
   textarea.style.position = 'fixed';
@@ -250,42 +239,6 @@ async function copyToClipboard(text, successMsg) {
   return ok;
 }
 
-// Generate command based on active tab, selected client, and OS
-function getActiveCommand() {
-  switch (activeTab) {
-    case 'quickstart':
-      if (currentOs === 'windows') {
-        return `& ([scriptblock]::Create((irm '${BASE_URL}/downloads/install.ps1'))) -Client ${targetClient}`;
-      }
-      return `curl -fsSL ${BASE_URL}/downloads/install.sh | bash -s -- ${targetClient}`;
-
-    case 'source':
-      return `git clone https://github.com/enricoarmiento/Garmin_MCP.git && cd Garmin_MCP && uv sync && uv run garmin-mcp login`;
-
-    default:
-      return `curl -fsSL ${BASE_URL}/downloads/install.sh | bash`;
-  }
-}
-
-// Get helper note for current state
-function getActiveNote() {
-  const t = TRANSLATIONS[currentLang];
-  switch (activeTab) {
-    case 'quickstart':
-      if (targetClient === 'antigravity') return t.termNoteAntigravity;
-      if (targetClient === 'deepseek') return t.termNoteDeepseek;
-      if (targetClient === 'claude') return t.termNoteClaude;
-      if (targetClient === 'codex') return t.termNoteCodex;
-      if (currentOs === 'windows') return t.termNoteWin;
-      return t.termNoteMac;
-    case 'source':
-      return t.termNoteSource;
-    default:
-      return t.termNoteMac;
-  }
-}
-
-// Render UI strings & terminal
 function renderUI() {
   const t = TRANSLATIONS[currentLang];
   document.documentElement.lang = currentLang;
@@ -296,72 +249,17 @@ function renderUI() {
   document.querySelectorAll('[data-i18n-aria]').forEach(elem => {
     elem.setAttribute('aria-label', t[elem.dataset.i18nAria]);
   });
-  document.querySelectorAll('[data-lang]').forEach(btn => {
-    btn.setAttribute('aria-pressed', String(btn.dataset.lang === currentLang));
-  });
-  el('term-panel').setAttribute('aria-labelledby', 'tab-' + activeTab);
-
-  // Update all data-i18n elements
   document.querySelectorAll('[data-i18n]').forEach(elem => {
     const key = elem.getAttribute('data-i18n');
-    if (t[key] !== undefined) {
-      elem.textContent = t[key];
-    }
+    if (t[key] !== undefined) elem.textContent = t[key];
   });
-
-  // Update Language switch buttons
-  const itBtn = el('btn-lang-it');
-  const enBtn = el('btn-lang-en');
-  if (itBtn && enBtn) {
-    itBtn.classList.toggle('active', currentLang === 'it');
-    enBtn.classList.toggle('active', currentLang === 'en');
-  }
-
-  // Update Terminal Tabs
-  document.querySelectorAll('.tab-pill').forEach(btn => {
-    const tabName = btn.getAttribute('data-tab');
-    const isSelected = tabName === activeTab;
-    btn.classList.toggle('active', isSelected);
-    btn.setAttribute('aria-selected', String(isSelected));
-    btn.tabIndex = isSelected ? 0 : -1;
+  document.querySelectorAll('[data-lang]').forEach(btn => {
+    const active = btn.dataset.lang === currentLang;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
   });
-
-  // Update Client pills
-  document.querySelectorAll('.client-pill').forEach(btn => {
-    const clientName = btn.getAttribute('data-client');
-    btn.classList.toggle('active', clientName === targetClient);
-    btn.setAttribute('aria-pressed', String(clientName === targetClient));
-  });
-
-  // Update OS pills
-  document.querySelectorAll('.os-pill').forEach(btn => {
-    const osName = btn.getAttribute('data-os');
-    btn.classList.toggle('active', osName === currentOs);
-    btn.setAttribute('aria-pressed', String(osName === currentOs));
-  });
-
-  // Show or hide Client & OS selector
-  const clientPillsContainer = el('client-pills');
-  const osPillsContainer = el('os-pills');
-  const isQuickstart = activeTab === 'quickstart';
-
-  if (clientPillsContainer) clientPillsContainer.style.display = isQuickstart ? 'inline-flex' : 'none';
-  if (osPillsContainer) osPillsContainer.style.display = isQuickstart ? 'inline-flex' : 'none';
-
-  // Update Terminal Command and Note
-  const cmd = getActiveCommand();
-  const termCmdElem = el('term-command');
-  if (termCmdElem) termCmdElem.textContent = cmd;
-
-  const termNoteElem = el('term-note');
-  if (termNoteElem) termNoteElem.textContent = getActiveNote();
-
-  // Update Modal Code
-  const modalCode = el('modal-code');
-  if (modalCode) modalCode.textContent = cmd;
 }
 
-// Switch Language
 function setLanguage(lang) {
   if (lang !== 'it' && lang !== 'en') return;
   currentLang = lang;
@@ -369,73 +267,16 @@ function setLanguage(lang) {
   renderUI();
 }
 
-// Switch Active Tab
-function setTab(tab) {
-  activeTab = tab;
-  renderUI();
-}
-
-// Switch Target Client (in Quick start)
-function setClient(client) {
-  targetClient = client;
-  renderUI();
-}
-
-// Switch Active OS
-function setOs(os) {
-  currentOs = os;
-  renderUI();
-}
-
-// Event Listeners Initialization
 function initEventListeners() {
-  // Language switcher
-  const itBtn = el('btn-lang-it');
-  const enBtn = el('btn-lang-en');
-  if (itBtn) itBtn.addEventListener('click', () => setLanguage('it'));
-  if (enBtn) enBtn.addEventListener('click', () => setLanguage('en'));
-
-  // Terminal Tab buttons
-  document.querySelectorAll('.tab-pill').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setTab(btn.getAttribute('data-tab'));
-    });
+  document.querySelectorAll('[data-lang]').forEach(btn => {
+    btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
   });
 
-  // Roving keyboard focus for the shared installation panel.
-  const tabs = [...document.querySelectorAll('.tab-pill')];
-  tabs.forEach((btn, index) => btn.addEventListener('keydown', event => {
-    let next;
-    if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
-    if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
-    if (event.key === 'Home') next = 0;
-    if (event.key === 'End') next = tabs.length - 1;
-    if (next === undefined) return;
-    event.preventDefault();
-    setTab(tabs[next].dataset.tab);
-    tabs[next].focus();
-  }));
-
-  // Client selector pills
-  document.querySelectorAll('.client-pill').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setClient(btn.getAttribute('data-client'));
-    });
-  });
-
-  // OS selector pills
-  document.querySelectorAll('.os-pill').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setOs(btn.getAttribute('data-os'));
-    });
-  });
-
-  // Copy Terminal Command
   const copyBtn = el('btn-copy');
   if (copyBtn) {
     copyBtn.addEventListener('click', async () => {
       const t = TRANSLATIONS[currentLang];
-      const copied = await copyToClipboard(getActiveCommand(), t.copied);
+      const copied = await copyToClipboard(AGENSI_COMMAND, t.copied);
       const copyText = el('copy-text');
       if (copyText && copied) {
         copyText.textContent = t.copied;
@@ -444,51 +285,35 @@ function initEventListeners() {
     });
   }
 
-  // Copy Example Prompt
   const copyPromptBtn = el('btn-copy-prompt');
   if (copyPromptBtn) {
-    copyPromptBtn.addEventListener('click', () => {
+    const copyPrompt = () => {
       const promptText = el('example-prompt-text').textContent.replace(/[“”"]/g, '').trim();
-      const t = TRANSLATIONS[currentLang];
-      copyToClipboard(promptText, t.copied);
+      copyToClipboard(promptText, TRANSLATIONS[currentLang].copied);
+    };
+    copyPromptBtn.addEventListener('click', copyPrompt);
+    copyPromptBtn.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); copyPrompt(); }
     });
   }
 
-  // Modal Setup Dialog
   const setupDialog = el('setup-dialog');
-  const modalOpenBtn = el('btn-modal-open');
-  const modalCloseBtn = el('modal-close');
-  const modalDismissBtn = el('modal-dismiss');
-  const modalCopyBtn = el('modal-copy-btn');
-
   if (setupDialog) {
-    if (modalOpenBtn) {
-      modalOpenBtn.addEventListener('click', () => {
-        setupDialog.showModal();
-      });
-    }
-
     const closeModal = () => setupDialog.close();
-    if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
-    if (modalDismissBtn) modalDismissBtn.addEventListener('click', closeModal);
-
+    el('btn-modal-open')?.addEventListener('click', () => setupDialog.showModal());
+    el('modal-close')?.addEventListener('click', closeModal);
+    el('modal-dismiss')?.addEventListener('click', closeModal);
     setupDialog.addEventListener('click', e => {
-      if (e.target === setupDialog) {
-        const bounds = setupDialog.getBoundingClientRect();
-        if (e.clientX < bounds.left || e.clientX > bounds.right || e.clientY < bounds.top || e.clientY > bounds.bottom) closeModal();
-      }
+      if (e.target !== setupDialog) return;
+      const b = setupDialog.getBoundingClientRect();
+      if (e.clientX < b.left || e.clientX > b.right || e.clientY < b.top || e.clientY > b.bottom) closeModal();
     });
-
-    if (modalCopyBtn) {
-      modalCopyBtn.addEventListener('click', () => {
-        const t = TRANSLATIONS[currentLang];
-        copyToClipboard(getActiveCommand(), t.copied);
-      });
-    }
+    el('modal-copy-btn')?.addEventListener('click', () => {
+      copyToClipboard(AGENSI_COMMAND, TRANSLATIONS[currentLang].copied);
+    });
   }
 }
 
-// Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   initEventListeners();
   renderUI();

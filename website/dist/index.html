@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>garmin_mcp — I tuoi dati Garmin, nel tuo assistente</title>
-  <meta name="description" content="Server MCP locale per collegare i tuoi dati Garmin Connect a Claude Desktop, Codex e assistenti AI con accesso sicuro in sola lettura.">
+  <title>Garmin Connect Reader &amp; Coach — I tuoi dati Garmin, analizzati da Claude</title>
+  <meta name="description" content="Skill per Claude Code: legge in sola lettura sonno, HRV, Training Readiness, VO2max e attività dal tuo account Garmin Connect e li trasforma in report e consigli.">
   <meta name="theme-color" content="#101214">
-  <meta property="og:title" content="garmin_mcp — I tuoi dati Garmin, nel tuo assistente">
-  <meta property="og:description" content="Attività, sonno, battito cardiaco, stress e trend Garmin nel tuo assistente AI.">
+  <meta property="og:title" content="Garmin Connect Reader &amp; Coach — I tuoi dati Garmin, analizzati da Claude">
+  <meta property="og:description" content="Sonno, recupero, allenamenti e trend Garmin analizzati da Claude Code. Sola lettura, tutto in uno.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -18,17 +18,14 @@
 <body>
   <div class="hero-atmosphere" aria-hidden="true"></div>
 
-  <!-- Floating navigation -->
   <header class="site-header">
     <div class="shell header-content">
-      <a class="brand" href="#" aria-label="garmin_mcp"><span class="brand-text">garmin_mcp</span></a>
+      <a class="brand" href="#" aria-label="Garmin Connect Reader &amp; Coach"><span class="brand-text">garmin_coach</span></a>
       <nav class="main-nav" aria-label="Navigazione principale" data-i18n-aria="navigationLabel">
-        <a href="#tools" data-i18n="navTools">Strumenti</a>
-        <a href="#guide" data-i18n="navGuide">Installazione</a>
+        <a href="#tools" data-i18n="navTools">Cosa chiedere</a>
+        <a href="#guide" data-i18n="navGuide">Come funziona</a>
         <a href="#faq" data-i18n="navFaq">FAQ</a>
       </nav>
-
-      <!-- Right menu: Language Switcher Pill -->
       <div class="header-actions">
         <div class="lang-switch" role="group" aria-label="Lingua" data-i18n-aria="languageLabel">
           <button type="button" class="lang-btn active" data-lang="it" id="btn-lang-it" lang="it" aria-label="Italiano" aria-pressed="true">IT</button>
@@ -39,84 +36,49 @@
   </header>
 
   <main>
-    <!-- Overview and installation -->
     <section class="shell hero" id="start" aria-labelledby="hero-title">
-      <!-- Left Column: Typography & Action Buttons -->
       <div class="hero-left">
-        <p class="hero-kicker" data-i18n="eyebrow">Garmin Connect / MCP</p>
-        <h1 id="hero-title" class="hero-title" data-i18n="heroTitle">I tuoi dati Garmin. Nel tuo assistente.</h1>
+        <p class="hero-kicker" data-i18n="eyebrow">Skill per Claude Code · Garmin Connect</p>
+        <h1 id="hero-title" class="hero-title" data-i18n="heroTitle">I tuoi dati Garmin. Analizzati da Claude.</h1>
+        <p class="hero-lead" data-i18n="heroSubtitle1">Chiedi come hai dormito, se oggi puoi allenarti forte o come stanno andando le tue corse. Claude legge i tuoi dati Garmin e ti risponde con numeri e consigli chiari.</p>
+        <p class="hero-subtext" data-i18n="heroSubtitle2">Tutto in uno: nessun server MCP da installare a parte, nessuna chiave API. Sola lettura: il tuo account Garmin non viene mai modificato.</p>
 
-        <p class="hero-lead" data-i18n="heroSubtitle1">Collega attività, sonno e recupero a Google Antigravity, DeepSeek Harness, Claude o Codex.</p>
-        <p class="hero-subtext" data-i18n="heroSubtitle2">Un server MCP sul tuo computer, cinque strumenti in sola lettura. Codice aperto, nessuna modifica al tuo account Garmin.</p>
-
-        <!-- 4 Action Buttons in 2x2 Grid -->
         <div class="hero-action-grid">
-          <a class="btn btn-white" href="https://github.com/enricoarmiento/Garmin_MCP" target="_blank" rel="noopener noreferrer">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          <a class="btn btn-white" href="https://agensi.io/skills/garmin-connect-reader-coach" target="_blank" rel="noopener noreferrer">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
             </svg>
-            <span data-i18n="btnGithub">Vedi su GitHub</span>
+            <span data-i18n="btnBuy">Acquista su Agensi</span>
           </a>
-
           <a class="btn btn-dark" href="#guide">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="16" y1="13" x2="8" y2="13"/>
-              <line x1="16" y1="17" x2="8" y2="17"/>
-              <polyline points="10 9 9 9 8 9"/>
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
             </svg>
-            <span data-i18n="btnDocs">Installazione</span>
+            <span data-i18n="btnDocs">Come funziona</span>
           </a>
-
           <a class="btn btn-dark" href="#tools">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="3" width="7" height="7"/>
-              <rect x="14" y="3" width="7" height="7"/>
-              <rect x="14" y="14" width="7" height="7"/>
-              <rect x="3" y="14" width="7" height="7"/>
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
             </svg>
-            <span data-i18n="btnTools">Strumenti MCP</span>
+            <span data-i18n="btnTools">Cosa puoi chiedere</span>
           </a>
-
-          <a class="btn btn-dark" href="/downloads/garmin-mcp-source.zip" download>
+          <a class="btn btn-dark" href="#faq">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="7 10 12 15 17 10"/>
-              <line x1="12" y1="15" x2="12" y2="3"/>
+              <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
             </svg>
-            <span data-i18n="btnDownload">Scarica sorgenti</span>
+            <span data-i18n="btnFaq">Domande frequenti</span>
           </a>
         </div>
+        <p class="hero-price" data-i18n="heroPrice">3 $ una tantum · Rimborso garantito da Agensi se la skill non fa ciò che promette</p>
       </div>
 
-      <!-- Installation commands -->
       <div class="hero-right">
-        <!-- Installation method -->
-        <div class="terminal-tab-nav" role="tablist" aria-label="Modalità di installazione" data-i18n-aria="installationLabel">
-          <button class="tab-pill active" id="tab-quickstart" role="tab" aria-selected="true" aria-controls="term-panel" data-tab="quickstart" data-i18n="tabQuickstart">Avvio rapido</button>
-          <button class="tab-pill" id="tab-source" role="tab" aria-selected="false" aria-controls="term-panel" tabindex="-1" data-tab="source" data-i18n="tabSource">Da sorgenti</button>
-        </div>
-
-        <!-- Terminal Window Card -->
-        <div class="terminal-box" id="term-panel" role="tabpanel" tabindex="0" aria-labelledby="tab-quickstart">
+        <div class="terminal-box" id="term-panel" tabindex="0" aria-label="Installazione" data-i18n-aria="installationLabel">
           <div class="terminal-header">
-
-            <!-- Terminal controls (Client Selector + OS Switcher + Copy Button) -->
             <div class="terminal-actions">
-              <div class="client-pills" id="client-pills" role="group" aria-label="Assistente" data-i18n-aria="assistantLabel">
-                <button type="button" class="client-pill active" data-client="antigravity">Antigravity</button>
-                <button type="button" class="client-pill" data-client="deepseek">DeepSeek</button>
-                <button type="button" class="client-pill" data-client="claude">Claude</button>
-                <button type="button" class="client-pill" data-client="codex">Codex</button>
-              </div>
-
-              <div class="os-pills" id="os-pills" role="group" aria-label="Sistema operativo" data-i18n-aria="osLabel">
-                <button type="button" class="os-pill active" data-os="mac">macOS</button>
-                <button type="button" class="os-pill" data-os="windows">Windows</button>
-                <button type="button" class="os-pill" data-os="linux">Linux</button>
-              </div>
-
+              <span class="terminal-label" data-i18n="terminalLabel">COLLEGA AGENSI A CLAUDE CODE</span>
               <button class="copy-btn" id="btn-copy" aria-label="Copia comando" data-i18n-aria="copyCommand">
                 <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
@@ -126,214 +88,182 @@
               </button>
             </div>
           </div>
-
           <div class="terminal-body">
             <div class="code-line">
               <span class="cmd-prompt" aria-hidden="true">$</span>
-              <code id="term-command" class="cmd-text">curl -fsSL https://raw.githubusercontent.com/enricoarmiento/Garmin_MCP/main/website/dist/downloads/install.sh | bash -s -- antigravity</code>
+              <code id="term-command" class="cmd-text">claude mcp add --transport http agensi https://mcp.agensi.io/mcp/auth</code>
             </div>
-            <p class="term-note" id="term-note" data-i18n="termNoteAntigravity">Configura Garmin MCP in Google Antigravity IDE (~/.gemini/antigravity-ide/mcp_config.json).</p>
+            <p class="term-note" id="term-note" data-i18n="termNote">Poi in Claude Code scrivi /mcp per accedere ad Agensi e chiedi: «Carica la skill Garmin Connect Reader &amp; Coach e configura Garmin».</p>
           </div>
-
           <div class="terminal-footer">
-            <div class="terminal-status">
-
-              <span data-i18n="trustText">Account personale · Sola lettura</span>
-            </div>
+            <div class="terminal-status"><span data-i18n="trustText">Account personale · Sola lettura</span></div>
             <button type="button" class="btn-text-link" id="btn-modal-open">
-              <span data-i18n="modalTitle">Istruzioni di installazione</span> ↗
+              <span data-i18n="modalTitle">Istruzioni complete</span> ↗
             </button>
           </div>
         </div>
-
-        <p class="below-terminal-text" data-i18n="belowTerminal">Il server gira sul tuo computer. I dati richiesti vengono condivisi con l’assistente che scegli.</p>
+        <p class="below-terminal-text" data-i18n="belowTerminal">La skill gira sul tuo computer. La password Garmin la scrivi solo tu nel terminale: Claude non la vede mai.</p>
       </div>
     </section>
 
-    <!-- Data Strip: Biometrics in conversation -->
     <section class="shell data-ribbon" aria-label="Dati Garmin disponibili" data-i18n-aria="metricsLabel">
-      <span class="ribbon-label" data-i18n="dataStripLabel">DATI DISPONIBILI</span>
+      <span class="ribbon-label" data-i18n="dataStripLabel">DATI LETTI</span>
       <div class="ribbon-tags">
-        <span class="ribbon-item"><span data-i18n="metricActivities">Attività e giri</span></span>
-        <span class="ribbon-item"><span data-i18n="metricSleep">Fasi del sonno</span></span>
-        <span class="ribbon-item"><span data-i18n="metricHeart">Battito cardiaco</span></span>
-        <span class="ribbon-item"><span data-i18n="metricStress">Stress e HRV</span></span>
-        <span class="ribbon-item"><span data-i18n="metricBattery">Body Battery</span></span>
-        <span class="ribbon-item"><span data-i18n="metricTrends">Trend fino a 31 giorni</span></span>
+        <span class="ribbon-item"><span data-i18n="metricSleep">Sonno e fasi</span></span>
+        <span class="ribbon-item"><span data-i18n="metricReadiness">HRV e Training Readiness</span></span>
+        <span class="ribbon-item"><span data-i18n="metricVo2">VO2max e stato di allenamento</span></span>
+        <span class="ribbon-item"><span data-i18n="metricActivities">Attività, giri e zone cardio</span></span>
+        <span class="ribbon-item"><span data-i18n="metricBattery">Body Battery e stress</span></span>
+        <span class="ribbon-item"><span data-i18n="metricRecords">Record e previsioni gara</span></span>
       </div>
     </section>
 
-    <!-- MCP Tools Grid Section -->
     <section class="shell tools-section" id="tools" aria-labelledby="tools-title">
       <div class="section-heading">
-        <p class="section-kicker" data-i18n="previewBadge">Strumenti in sola lettura</p>
-        <h2 id="tools-title" data-i18n="toolsSectionTitle">Cinque strumenti. I dati che servono.</h2>
-        <p class="section-desc" data-i18n="toolsSectionDesc">Dal riepilogo della giornata ai dettagli di una singola attività.</p>
+        <p class="section-kicker" data-i18n="previewBadge">Analisi pronte all'uso</p>
+        <h2 id="tools-title" data-i18n="toolsSectionTitle">Fai domande. Ricevi risposte con i tuoi numeri.</h2>
+        <p class="section-desc" data-i18n="toolsSectionDesc">Sei analisi guidate incluse nella skill. Claude indica sempre il periodo, i dati usati e i giorni mancanti.</p>
       </div>
-
       <div class="tools-grid">
         <article class="tool-card">
           <div class="tool-badge">01</div>
-          <h3 class="tool-name">garmin_status</h3>
-          <p class="tool-desc" data-i18n="tool1Desc">Controlla la presenza dei token di accesso sul computer, senza chiamate di rete.</p>
-          <div class="tool-foot"><code data-i18n="noParams">Nessun parametro</code></div>
+          <h3 class="tool-name" data-i18n="tool1Name">Report settimanale o mensile</h3>
+          <p class="tool-desc" data-i18n="tool1Desc">Passi, distanza, frequenza a riposo e stress confrontati con il periodo precedente.</p>
+          <div class="tool-foot"><code data-i18n="tool1Ask">«Com'è andata la mia settimana?»</code></div>
         </article>
-
         <article class="tool-card">
           <div class="tool-badge">02</div>
-          <h3 class="tool-name">garmin_daily</h3>
-          <p class="tool-desc" data-i18n="tool2Desc">Consulta il riepilogo giornaliero: sonno, frequenza cardiaca, stress e Body Battery.</p>
-          <div class="tool-foot"><code>day, metric</code></div>
+          <h3 class="tool-name" data-i18n="tool2Name">Recupero del giorno</h3>
+          <p class="tool-desc" data-i18n="tool2Desc">Verdetto chiaro (allenati, vai piano, riposa) basato su Training Readiness, HRV, sonno e frequenza a riposo.</p>
+          <div class="tool-foot"><code data-i18n="tool2Ask">«Posso fare ripetute oggi?»</code></div>
         </article>
-
         <article class="tool-card">
           <div class="tool-badge">03</div>
-          <h3 class="tool-name">garmin_activities</h3>
-          <p class="tool-desc" data-i18n="tool3Desc">Elenca le attività recenti con sport, distanza e durata.</p>
-          <div class="tool-foot"><code>start, limit</code></div>
+          <h3 class="tool-name" data-i18n="tool3Name">Analisi del sonno</h3>
+          <p class="tool-desc" data-i18n="tool3Desc">Durata, punteggio, fasi profondo/REM/leggero, regolarità; notte migliore e peggiore.</p>
+          <div class="tool-foot"><code data-i18n="tool3Ask">«Come ho dormito questa settimana?»</code></div>
         </article>
-
         <article class="tool-card">
           <div class="tool-badge">04</div>
-          <h3 class="tool-name">garmin_activity</h3>
-          <p class="tool-desc" data-i18n="tool4Desc">Esplora una singola attività, con dettagli, giri e tempi parziali.</p>
-          <div class="tool-foot"><code>activity_id</code></div>
+          <h3 class="tool-name" data-i18n="tool4Name">Confronto corse e uscite</h3>
+          <p class="tool-desc" data-i18n="tool4Desc">Tabella con passo, battito, dislivello ed efficienza; per una sessione: giri, zone cardio e meteo.</p>
+          <div class="tool-foot"><code data-i18n="tool4Ask">«Confronta le mie ultime 10 corse»</code></div>
         </article>
-
         <article class="tool-card">
           <div class="tool-badge">05</div>
-          <h3 class="tool-name">garmin_trends</h3>
-          <p class="tool-desc" data-i18n="tool5Desc">Confronta dati e medie su un intervallo da 1 a 31 giorni.</p>
-          <div class="tool-foot"><code>start_date, end_date</code></div>
+          <h3 class="tool-name" data-i18n="tool5Name">Progressi di forma</h3>
+          <p class="tool-desc" data-i18n="tool5Desc">VO2max nel tempo, stato di allenamento, record personali e previsioni dei tempi di gara.</p>
+          <div class="tool-foot"><code data-i18n="tool5Ask">«Il mio VO2max sta migliorando?»</code></div>
+        </article>
+        <article class="tool-card">
+          <div class="tool-badge">06</div>
+          <h3 class="tool-name" data-i18n="tool6Name">Stress ed energia</h3>
+          <p class="tool-desc" data-i18n="tool6Desc">Stress medio e picchi con Body Battery, messi in relazione a sonno e allenamenti.</p>
+          <div class="tool-foot"><code data-i18n="tool6Ask">«Perché sono così stanco ultimamente?»</code></div>
         </article>
       </div>
     </section>
 
-    <!-- 3-Step Guide Section -->
     <section class="shell guide-section" id="guide" aria-labelledby="guide-title">
       <div class="section-heading">
-        <p class="section-kicker" data-i18n="guideEyebrow">CONFIGURAZIONE</p>
-        <h2 id="guide-title" data-i18n="guideTitle">Dal tuo Garmin al tuo assistente.</h2>
+        <p class="section-kicker" data-i18n="guideEyebrow">COME FUNZIONA</p>
+        <h2 id="guide-title" data-i18n="guideTitle">Tre passaggi, una volta sola.</h2>
       </div>
-
       <div class="steps-grid">
         <article class="step-card">
-          <span class="step-num" data-i18n="step1Num">01</span>
-          <h3 data-i18n="step1Title">Scegli il tuo assistente</h3>
-          <p data-i18n="step1Desc">Seleziona assistente e sistema operativo, poi copia il comando di avvio rapido.</p>
+          <span class="step-num">01</span>
+          <h3 data-i18n="step1Title">Acquista e collega</h3>
+          <p data-i18n="step1Desc">Acquista la skill su Agensi, collega Agensi a Claude Code con il comando qui sopra e chiedi a Claude di caricarla.</p>
         </article>
-
         <article class="step-card">
-          <span class="step-num" data-i18n="step2Num">02</span>
-          <h3 data-i18n="step2Title">Accedi a Garmin in locale</h3>
-          <p data-i18n="step2Desc">Esegui il comando nel terminale e accedi a Garmin Connect. I token di accesso vengono salvati sul tuo computer.</p>
+          <span class="step-num">02</span>
+          <h3 data-i18n="step2Title">Accedi a Garmin dal tuo terminale</h3>
+          <p data-i18n="step2Desc">Claude prepara tutto e ti dà un comando: lo esegui tu, inserisci email, password ed eventuale codice MFA. Python si installa da solo.</p>
         </article>
-
         <article class="step-card">
-          <span class="step-num" data-i18n="step3Num">03</span>
-          <h3 data-i18n="step3Title">Inizia a conversare</h3>
-          <p data-i18n="step3Desc">Riavvia l’assistente e chiedi un riepilogo del sonno, delle attività o del recupero.</p>
+          <span class="step-num">03</span>
+          <h3 data-i18n="step3Title">Chiedi quello che vuoi</h3>
+          <p data-i18n="step3Desc">Da quel momento basta parlare con Claude: sonno, recupero, allenamenti e trend, nella tua lingua.</p>
         </article>
       </div>
-
-      <!-- Example conversation prompt -->
       <div class="example-prompt-card" id="btn-copy-prompt" role="button" tabindex="0" aria-label="Copia esempio" data-i18n-aria="copyExample">
         <div class="prompt-left">
           <span class="quote-symbol" aria-hidden="true">“</span>
-          <span id="example-prompt-text" data-i18n="examplePromptText">“Come sono cambiati sonno e stress negli ultimi 7 giorni?”</span>
+          <span id="example-prompt-text" data-i18n="examplePromptText">“Posso fare ripetute oggi? E confronta il mio sonno con la settimana scorsa.”</span>
         </div>
         <span class="prompt-copy-badge" data-i18n="examplePromptAction">Copia esempio</span>
       </div>
     </section>
 
-    <!-- FAQ Accordion -->
     <section class="shell faq-section" id="faq" aria-labelledby="faq-title">
       <div class="section-heading">
         <h2 id="faq-title" data-i18n="faqTitle">Domande frequenti</h2>
       </div>
-
       <div class="faq-list">
         <details class="faq-item">
-          <summary>
-            <span data-i18n="faq1Q">Posso collegarlo direttamente dal browser?</span>
-            <span class="faq-arrow" aria-hidden="true">+</span>
-          </summary>
-          <p data-i18n="faq1A">No. Questa pagina fornisce i comandi e la guida. Il server MCP viene installato e avviato sul tuo computer dal tuo assistente.</p>
+          <summary><span data-i18n="faq1Q">Cosa mi serve?</span><span class="faq-arrow" aria-hidden="true">+</span></summary>
+          <p data-i18n="faq1A">Un account Garmin Connect con l'orologio sincronizzato, Claude Code su macOS o Linux e una connessione internet. Serve anche uv, il gestore Python: se manca, Claude ti chiede il permesso e lo installa. Python e le librerie si installano da soli.</p>
         </details>
-
         <details class="faq-item">
-          <summary>
-            <span data-i18n="faq2Q">Dove vengono salvate le credenziali e i miei dati sanitari?</span>
-            <span class="faq-arrow" aria-hidden="true">+</span>
-          </summary>
-          <p data-i18n="faq2A">Accedi direttamente a Garmin Connect dal terminale. I token vengono salvati nella cartella ~/.garmin-mcp sul tuo computer. Quando usi uno strumento, i dati richiesti vengono passati al client AI: il loro trattamento dipende dall’assistente e dalle sue impostazioni.</p>
+          <summary><span data-i18n="faq2Q">Funziona nella chat di claude.ai o su Windows?</span><span class="faq-arrow" aria-hidden="true">+</span></summary>
+          <p data-i18n="faq2A">La skill ha bisogno di un terminale sul tuo computer, quindi è pensata per Claude Code (app desktop o terminale), non per la chat web. Windows non è ancora stato testato.</p>
         </details>
-
         <details class="faq-item">
-          <summary>
-            <span data-i18n="faq3Q">Quali client sono supportati?</span>
-            <span class="faq-arrow" aria-hidden="true">+</span>
-          </summary>
-          <p data-i18n="faq3A">La configurazione guidata supporta Google Antigravity, DeepSeek Harness, Claude Desktop e Codex. Claude Desktop è disponibile su macOS e Windows. Puoi configurare manualmente anche altri client MCP compatibili con stdio.</p>
+          <summary><span data-i18n="faq3Q">La mia password è al sicuro?</span><span class="faq-arrow" aria-hidden="true">+</span></summary>
+          <p data-i18n="faq3A">La password la scrivi solo tu, nel tuo terminale, e non viene salvata. Claude non la vede mai. Sul computer restano solo i token di sessione Garmin, nella cartella privata ~/.garmin-mcp: per scollegarti basta eliminarla.</p>
         </details>
-
         <details class="faq-item">
-          <summary>
-            <span data-i18n="faq4Q">Il server può modificare o cancellare i miei dati su Garmin?</span>
-            <span class="faq-arrow" aria-hidden="true">+</span>
-          </summary>
-          <p data-i18n="faq4A">No. I cinque strumenti sono in sola lettura: non caricano, modificano o cancellano attività e metriche su Garmin Connect.</p>
+          <summary><span data-i18n="faq4Q">Può modificare o cancellare i miei dati su Garmin?</span><span class="faq-arrow" aria-hidden="true">+</span></summary>
+          <p data-i18n="faq4A">No. La skill è in sola lettura: non carica, modifica o cancella attività e metriche. Le posizioni GPS non vengono mostrate se non le chiedi.</p>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i18n="faq5Q">Dove finiscono i miei dati sanitari?</span><span class="faq-arrow" aria-hidden="true">+</span></summary>
+          <p data-i18n="faq5A">I dati vanno da Garmin al tuo computer e arrivano a Claude solo quando fai una domanda. Il loro trattamento dipende dalle impostazioni del tuo account Claude. La skill non invia dati altrove.</p>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i18n="faq6Q">Cosa succede se un dato manca o Garmin non risponde?</span><span class="faq-arrow" aria-hidden="true">+</span></summary>
+          <p data-i18n="faq6A">Claude lo dice chiaramente: un dato mancante non viene mai trattato come zero. Alcune metriche (Training Readiness, HRV, VO2max) dipendono dal modello di orologio. Se Garmin limita le richieste, Claude si ferma e ti dice quanto aspettare.</p>
+        </details>
+        <details class="faq-item">
+          <summary><span data-i18n="faq7Q">È un prodotto ufficiale Garmin? Dà consigli medici?</span><span class="faq-arrow" aria-hidden="true">+</span></summary>
+          <p data-i18n="faq7A">No a entrambe. È un progetto indipendente basato sulla libreria non ufficiale python-garminconnect: un cambiamento lato Garmin può bloccare temporaneamente l'accesso fino a un aggiornamento. Le analisi sono descrittive e non sostituiscono un medico.</p>
         </details>
       </div>
     </section>
   </main>
 
-  <!-- Site Footer -->
   <footer class="shell site-footer">
     <div class="footer-left">
-      <span data-i18n="footerText">garmin_mcp · Progetto indipendente, non affiliato a Garmin.</span>
+      <span data-i18n="footerText">Garmin Connect Reader &amp; Coach · Progetto indipendente, non affiliato a Garmin.</span>
     </div>
     <div class="footer-links">
-      <a href="https://github.com/enricoarmiento/Garmin_MCP" target="_blank" rel="noopener noreferrer" data-i18n="footerRepo">GitHub</a>
-      <a href="/downloads/garmin-mcp-source.zip" download data-i18n="footerSource">Sorgente ZIP</a>
+      <a href="https://agensi.io/skills/garmin-connect-reader-coach" target="_blank" rel="noopener noreferrer" data-i18n="footerAgensi">Pagina su Agensi ↗</a>
       <a href="https://github.com/cyberjunky/python-garminconnect" target="_blank" rel="noopener noreferrer" data-i18n="footerLibrary">Libreria Garmin Connect ↗</a>
-      <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer" data-i18n="footerSpecs">Specifiche MCP ↗</a>
+      <a href="https://docs.claude.com/en/docs/claude-code/overview" target="_blank" rel="noopener noreferrer" data-i18n="footerClaude">Claude Code ↗</a>
     </div>
   </footer>
 
-  <!-- Detailed Setup Dialog Modal -->
   <dialog id="setup-dialog" class="setup-modal" aria-labelledby="modal-heading">
     <div class="modal-box">
       <button class="modal-close-btn" id="modal-close" aria-label="Chiudi istruzioni" data-i18n-aria="closeDialog">&times;</button>
-      <p class="section-kicker" data-i18n="previewBadge">Strumenti in sola lettura</p>
-      <h2 id="modal-heading" data-i18n="modalTitle">Istruzioni di installazione</h2>
-
+      <p class="section-kicker" data-i18n="modalKicker">Installazione</p>
+      <h2 id="modal-heading" data-i18n="modalTitle">Istruzioni complete</h2>
       <ol class="modal-steps">
+        <li><strong data-i18n="modalStep1">Acquista la skill su Agensi (link in alto).</strong></li>
         <li>
-          <strong data-i18n="modalStep1">Esegui questo comando nel terminale del tuo computer:</strong>
-          <div class="modal-code-box">
-            <code id="modal-code">curl -fsSL https://raw.githubusercontent.com/enricoarmiento/Garmin_MCP/main/website/dist/downloads/install.sh | bash</code>
-          </div>
+          <strong data-i18n="modalStep2">Nel terminale, collega Agensi a Claude Code:</strong>
+          <div class="modal-code-box"><code id="modal-code">claude mcp add --transport http agensi https://mcp.agensi.io/mcp/auth</code></div>
         </li>
-        <li>
-          <strong data-i18n="modalStep2">Effettua il login a Garmin Connect inserendo credenziali e codice MFA se richiesto.</strong>
-        </li>
-        <li>
-          <strong data-i18n="modalStep3">Riavvia Google Antigravity, DeepSeek Harness, Claude o Codex per caricare i nuovi strumenti.</strong>
-        </li>
+        <li><strong data-i18n="modalStep3">Apri Claude Code, scrivi /mcp, scegli agensi e accedi con il tuo account.</strong></li>
+        <li><strong data-i18n="modalStep4">Chiedi: «Carica la skill Garmin Connect Reader & Coach e configura Garmin». Claude prepara tutto e ti dà il comando di login: eseguilo in un terminale separato.</strong></li>
       </ol>
-
       <div class="modal-actions">
-        <button class="btn btn-white" id="modal-copy-btn">
-          <span data-i18n="copy">Copia</span>
-        </button>
+        <button class="btn btn-white" id="modal-copy-btn"><span data-i18n="copy">Copia</span></button>
         <button class="btn btn-dark" id="modal-dismiss" data-i18n="close">Chiudi</button>
       </div>
     </div>
   </dialog>
 
-  <!-- Toast Notification -->
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
 </body>
 </html>
