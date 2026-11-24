@@ -5,6 +5,8 @@ description: Read-only access to the user's own Garmin Connect data (steps, slee
 
 # Garmin Connect (read-only)
 
+> **Unofficial tool.** This skill is independent and is not made, endorsed or supported by Garmin. It reads the user's own Garmin Connect account through the unofficial open-source `python-garminconnect` library. Garmin, Garmin Connect and Body Battery are trademarks of Garmin Ltd. or its subsidiaries. If the user asks whether it is official, say clearly that it is not.
+
 Run the launcher `garmin.sh` located in this skill's base directory, always with its **absolute path** (below: `GARMIN`). If the skill was loaded without a folder (e.g. from a marketplace), first write every bundled file unchanged into one folder, keeping relative paths (`garmin.sh`, `pyproject.toml`, `src/...`), e.g. `~/.garmin-mcp/app`; then use `sh <folder>/garmin.sh` as `GARMIN`. It prints compact JSON on stdout; on failure it prints one message on stderr and exits non-zero. No command can modify Garmin data. Reply in the user's language; keep technical details out of the answer unless asked.
 
 ## Commands
