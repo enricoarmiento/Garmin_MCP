@@ -1013,6 +1013,7 @@ html { scroll-padding-top: 112px; }
 .tool-card:nth-child(3n+1) { padding-left: 0; }
 .tool-card:nth-child(3n) { border-right: 0; padding-right: 0; }
 .hero-price { color: #c5ccd1; font-size: 14px; margin-top: 18px; } .terminal-label { color: #899198; font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 1.2px; margin-right: auto; }
+.hero-disclaimer { color: #899198; font-size: 13px; line-height: 1.5; margin-top: 10px; max-width: 560px; border-left: 2px solid #3a4248; padding-left: 10px; }
 .terminal-header .terminal-actions { width: 100%; justify-content: space-between; }
 .tool-card:hover { background: none; transform: none; border-color: var(--border-subtle); }
 .tool-name { font-size: 14px; overflow-wrap: anywhere; }
