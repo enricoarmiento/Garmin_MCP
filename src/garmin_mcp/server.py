@@ -5,7 +5,7 @@ from typing import Any, Literal
 from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 
-from garmin_mcp.service import GarminService, token_path
+from garmin_mcp.service import ACTIVITY_EXTRAS, GarminService, token_path
 
 mcp = FastMCP("Garmin Read-only", instructions=(
     "Read Garmin Connect data. Dates are YYYY-MM-DD in the user's Garmin calendar. "
@@ -26,8 +26,12 @@ def garmin_status() -> dict[str, Any]:
 
 
 @mcp.tool(annotations=read_only)
-def garmin_daily(day: str, metric: Literal["summary", "sleep", "heart_rate", "stress", "body_battery", "hrv"] = "summary") -> dict[str, Any]:
-    """Read one daily metric. Sleep uses the wake-up date. Returns raw Garmin JSON, possibly empty."""
+def garmin_daily(day: str, metric: Literal[
+        "summary", "sleep", "heart_rate", "stress", "body_battery", "hrv", "training_readiness",
+        "training_status", "vo2max", "respiration", "spo2", "intensity_minutes", "fitness_age", "hydration",
+] = "summary") -> dict[str, Any]:
+    """Read one daily metric. Sleep uses the wake-up date. Returns raw Garmin JSON, possibly empty.
+    Availability of advanced metrics depends on the watch model."""
     return service.daily(day, metric)
 
 
@@ -41,13 +45,22 @@ def garmin_activities(start: int = 0, limit: int = 20) -> dict[str, Any]:
 
 @mcp.tool(annotations=read_only)
 def garmin_activity(activity_id: str, include_splits: bool = False) -> dict[str, Any]:
-    """Read activity detail and optional lap splits. May include GPS/location data."""
+    """Read activity detail; include_splits adds laps, heart-rate zones and weather. May include GPS/location data."""
     if not activity_id.isascii() or not activity_id.isdigit() or int(activity_id) <= 0:
         raise ValueError("activity_id deve essere un intero positivo.")
     result = {"activity_id": activity_id, "data": service.read("get_activity", activity_id)}
     if include_splits:
         result["splits"] = service.read("get_activity_splits", activity_id)
+        for name, method in ACTIVITY_EXTRAS.items():
+            result[name] = service.optional(method, activity_id)
     return result
+
+
+@mcp.tool(annotations=read_only)
+def garmin_profile() -> dict[str, Any]:
+    """Personal records and race time predictions (raw Garmin units: seconds, meters)."""
+    return {"personal_records": service.optional("get_personal_record"),
+            "race_predictions": service.optional("get_race_predictions")}
 
 
 @mcp.tool(annotations=read_only)

@@ -16,7 +16,8 @@ async def test_real_stdio_roundtrip_without_credentials(tmp_path):
             await session.initialize()
             tools = (await session.list_tools()).tools
             assert {t.name for t in tools} == {
-                "garmin_status", "garmin_daily", "garmin_activities", "garmin_activity", "garmin_trends"
+                "garmin_status", "garmin_daily", "garmin_activities", "garmin_activity", "garmin_trends",
+                "garmin_profile",
             }
             assert all(t.annotations.readOnlyHint for t in tools)
             result = await session.call_tool("garmin_status", {})

@@ -17,9 +17,11 @@ fi
 
 if [ "$1" = "login" ] && ! [ -t 0 ]; then
   echo "LOGIN_REQUIRES_TERMINAL: il login va eseguito dall'utente in un terminale:" >&2
-  echo "  \"$DIR/garmin\" login" >&2
+  echo "  sh \"$DIR/garmin.sh\" login" >&2
   exit 3
 fi
 
 # First run installs Python and dependencies into $ROOT/.venv (needs internet, ~30 s).
-exec "$UV" run --project "$ROOT" --locked --quiet --no-dev garmin-mcp "$@"
+# Lockfile is optional: marketplace copies ship without it (pins in pyproject.toml).
+LOCKED=""; [ -f "$ROOT/uv.lock" ] && LOCKED="--locked"
+exec "$UV" run --project "$ROOT" $LOCKED --quiet --no-dev garmin-mcp "$@"

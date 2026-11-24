@@ -42,9 +42,19 @@ METRICS = {
     "stress": "get_stress_data",
     "body_battery": "get_body_battery",
     "hrv": "get_hrv_data",
+    "training_readiness": "get_training_readiness",
+    "training_status": "get_training_status",
+    "vo2max": "get_max_metrics",
+    "respiration": "get_respiration_data",
+    "spo2": "get_spo2_data",
+    "intensity_minutes": "get_intensity_minutes_data",
+    "fitness_age": "get_fitnessage_data",
+    "hydration": "get_hydration_data",
 }
 NO_DATA = "Nessun dato Garmin per questa richiesta: dispositivo non sincronizzato o metrica non supportata dall'orologio."
-ALLOWED = set(METRICS.values()) | {"get_activities", "get_activity", "get_activity_splits"}
+ACTIVITY_EXTRAS = {"hr_zones": "get_activity_hr_in_timezones", "weather": "get_activity_weather"}
+ALLOWED = set(METRICS.values()) | set(ACTIVITY_EXTRAS.values()) | {
+    "get_activities", "get_activity", "get_activity_splits", "get_personal_record", "get_race_predictions"}
 
 
 class GarminService:
@@ -97,6 +107,15 @@ class GarminService:
         if metric not in METRICS:
             raise ValueError("Metrica non supportata.")
         return {"date": day, "metric": metric, "source": "Garmin Connect", "data": self.read(METRICS[metric], day)}
+
+    def optional(self, method: str, *args: Any) -> Any:
+        """Secondary data (e.g. weather of an indoor activity) must not fail the main read."""
+        try:
+            return self.read(method, *args)
+        except GarminError as exc:
+            if "Sessione" in str(exc) or "Limite" in str(exc):
+                raise
+            return None
 
     def trends(self, start_date: str, end_date: str) -> dict:
         start = date.fromisoformat(validate_day(start_date))

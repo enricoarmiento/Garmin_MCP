@@ -100,7 +100,11 @@ def test_activity_pagination_and_splits(monkeypatch, setup_service):
     client.get_activity_splits.return_value = {"lapDTOs": []}
     assert server.garmin_activities(20, 10)["data"] == []
     client.get_activities.assert_called_once_with(20, 10)
-    assert server.garmin_activity("123", True)["splits"] == {"lapDTOs": []}
+    client.get_activity_hr_in_timezones.return_value = [{"zoneNumber": 1}]
+    client.get_activity_weather.side_effect = garminconnect.GarminConnectNotFoundError("404")
+    detail = server.garmin_activity("123", True)
+    # Missing weather (indoor activity) must not fail the whole read.
+    assert detail["splits"] == {"lapDTOs": []} and detail["hr_zones"] == [{"zoneNumber": 1}] and detail["weather"] is None
     for start, limit in [(-1, 20), (0, 0), (0, 101)]:
         with pytest.raises(ValueError):
             server.garmin_activities(start, limit)
@@ -118,3 +122,13 @@ def test_missing_data_is_not_reported_as_outage(setup_service, exc, message):
     client.get_heart_rates.side_effect = exc
     with pytest.raises(GarminError, match=message):
         service.daily("2025-01-01", "heart_rate")
+
+
+def test_advanced_metric_and_profile(monkeypatch, setup_service):
+    service, client, _ = setup_service
+    monkeypatch.setattr(server, "service", service)
+    client.get_training_readiness.return_value = [{"score": 70}]
+    assert server.garmin_daily("2025-01-01", "training_readiness")["data"] == [{"score": 70}]
+    client.get_personal_record.return_value = [{"typeId": 3}]
+    client.get_race_predictions.side_effect = garminconnect.GarminConnectConnectionError("No data received")
+    assert server.garmin_profile() == {"personal_records": [{"typeId": 3}], "race_predictions": None}

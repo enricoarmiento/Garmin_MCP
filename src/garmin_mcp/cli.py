@@ -13,10 +13,10 @@ from garminconnect import (
     GarminConnectTooManyRequestsError,
 )
 
-from garmin_mcp.service import token_path
+from garmin_mcp.service import METRICS, token_path
 
 
-READ_COMMANDS = {"status", "daily", "activities", "activity", "trends"}
+READ_COMMANDS = {"status", "daily", "activities", "activity", "trends", "profile"}
 
 
 def main() -> None:
@@ -30,17 +30,17 @@ def main() -> None:
     sub.add_parser("status", help="Presenza token locale")
     p = sub.add_parser("daily", help="Metrica giornaliera")
     p.add_argument("day")
-    p.add_argument("metric", nargs="?", default="summary",
-                   choices=["summary", "sleep", "heart_rate", "stress", "body_battery", "hrv"])
+    p.add_argument("metric", nargs="?", default="summary", choices=list(METRICS))
     p = sub.add_parser("activities", help="Attività recenti")
     p.add_argument("--start", type=int, default=0)
     p.add_argument("--limit", type=int, default=20)
     p = sub.add_parser("activity", help="Dettaglio attività")
     p.add_argument("activity_id")
-    p.add_argument("--splits", action="store_true")
+    p.add_argument("--splits", action="store_true", help="Giri, zone cardio e meteo")
     p = sub.add_parser("trends", help="Andamento 1–31 giorni")
     p.add_argument("start_date")
     p.add_argument("end_date")
+    sub.add_parser("profile", help="Record personali e previsioni gara")
     args = parser.parse_args()
     args.command = args.command or "serve"
     # Suppress upstream log messages that may contain private request details.
@@ -54,6 +54,7 @@ def main() -> None:
             "activities": lambda: server.garmin_activities(args.start, args.limit),
             "activity": lambda: server.garmin_activity(args.activity_id, args.splits),
             "trends": lambda: server.garmin_trends(args.start_date, args.end_date),
+            "profile": lambda: server.garmin_profile(),
         }
         try:
             result = calls[args.command]()
